@@ -211,10 +211,10 @@ public class ProductController {
     @FXML
     void deleteProduct() {
         Product product = product_table.getSelectionModel().getSelectedItem();
-        GMSAlert deleteAlert = new GMSAlert(AlertType.DELETE_PRODUCT);
+        GMSAlert deleteAlert = new GMSAlert(AlertType.DELETE_PRODUCT, product);
         deleteAlert.setFxmlPath("/views/alerts/DeleteProductAlert.fxml");
-        deleteAlert.setObject(product);
-        deleteAlert.show().onYes(() -> {
+        deleteAlert.show();
+        deleteAlert.onYes(() -> {
             allProduct_list.remove(product);
             filteredProduct_list.remove(product);
             long count = allProduct_list.stream()
@@ -276,10 +276,10 @@ public class ProductController {
         if (productIDList.size() > 0) {
             String oldCatSelected = filterCategory_box.getValue();
             filterCategory_box.getSelectionModel().select(categoryBeingDeleted); // Show products of the selected category in table
-            GMSAlert alert = new GMSAlert(AlertType.DELETE_CATEGORY);
+            GMSAlert alert = new GMSAlert(AlertType.DELETE_CATEGORY, productIDList.size());
             alert.setFxmlPath("/views/alerts/DeleteCategoryAlert.fxml");
-            alert.setObject(productIDList.size());
-            alert.show().onYes(() -> {
+            alert.show();
+            alert.onYes(() -> {
                 allProduct_list.removeAll(filteredProduct_list); // Deleting local copy of the products of the selected category
                 filteredProduct_list.clear(); // Deleting all the products from table
                 for (var i : productIDList) { // deleting all the products of selected category from database
@@ -300,7 +300,7 @@ public class ProductController {
                 //Following statement must be executed at the end of all statements
                 filterCategory_box.getSelectionModel().select("All");
             });
-            alert.onClose(() -> filterCategory_box.getSelectionModel().select(oldCatSelected));
+            alert.onCancelRun(() -> filterCategory_box.getSelectionModel().select(oldCatSelected));
         } else { // If no products exists in the selected category
             allCategory_list.remove(categoryBeingDeleted);
             DBConnection.executeUpdate(String.format("Delete from category where name = '%s'", categoryBeingDeleted));
@@ -358,10 +358,10 @@ public class ProductController {
     @FXML
     void addProduct(ActionEvent event) {
         String productName = this.productName_field.getText().trim();
-        GMSAlert alert = new GMSAlert(AlertType.ADD_PRODUCT);
+        GMSAlert alert = new GMSAlert(AlertType.ADD_PRODUCT, productName);
         alert.setFxmlPath("/views/alerts/AddProductAlert.fxml");
-        alert.setObject(productName);
-        alert.show().onYes(() -> {
+        alert.show();
+        alert.onYes(() -> {
             String productCategory = productCategory_box.getValue();
             String productDescription = this.productDescription_field.getText().trim();
             productDescription = productDescription.isEmpty() ? "Description not Provided" : productDescription;

@@ -18,55 +18,67 @@ public class GMSAlert {
     private Object object;
     private Stage stage;
     private Scene scene;
-    private Runnable onCloseCode = null;
+    private Runnable onCancelCode = null;
     
     public GMSAlert(AlertType alertType) {
         this.alertType = alertType;
     }
     
-    public GMSAlert show() {
+    public GMSAlert(AlertType alertType, Object object) {
+        this.alertType = alertType;
+        this.object = object;
+    }
+    
+    public void show() {
         Parent root = null;
         try {
             root = FXMLLoader.load(getClass().getResource(fxmlPath));
         } catch (IOException ioException) {
             System.out.println("Unable to load FXML for Alert = " + ioException.getMessage());
         }
+        assert root != null;
         scene = new Scene(root);
         stage = new Stage();
-        stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
-        stage.setAlwaysOnTop(true);
-        // TODO disable anchorPane when below stage is shown
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
+        setContent();
         Button no = (Button) scene.lookup("#no");
         no.setOnMouseClicked(e -> {
-            if (onCloseCode != null)
-                onCloseCode.run();
+            if (onCancelCode != null)
+                onCancelCode.run();
             stage.close();
         });
-        return this;
+    }
+    
+    private void setContent() {
+        switch (alertType) {
+            case DELETE_PRODUCT:
+                Label id = (Label) scene.lookup("#id");
+                Label name = (Label) scene.lookup("#name");
+                Label category = (Label) scene.lookup("#category");
+                
+                Product product = (Product) object;
+                id.setText(String.valueOf(product.getId()));
+                name.setText(product.getName());
+                category.setText(product.getCategory());
+                break;
+            case DELETE_CATEGORY:
+                Label totalProduct_lbl = (Label) scene.lookup("#totalProducts");
+                totalProduct_lbl.setText(String.valueOf((int) object));
+                break;
+            case ADD_PRODUCT:
+                Label productName = (Label) scene.lookup("#productName");
+                productName.setText((String) object);
+                break;
+            default:
+                System.out.println("Not a valid alert type is selected");
+                throw new IllegalArgumentException();
+        }
     }
     
     public void onYes(Runnable code) {
-        if (alertType == AlertType.DELETE_PRODUCT) {
-            Product product = (Product) object;
-            
-            Label id = (Label) scene.lookup("#id");
-            Label name = (Label) scene.lookup("#name");
-            Label category = (Label) scene.lookup("#category");
-            
-            id.setText(String.valueOf(product.getId()));
-            name.setText(product.getName());
-            category.setText(product.getCategory());
-        } else if (alertType == AlertType.DELETE_CATEGORY) {
-            Label totalProduct_lbl = (Label) scene.lookup("#totalProducts");
-            totalProduct_lbl.setText(String.valueOf((int) object));
-        } else if (alertType == AlertType.ADD_PRODUCT) {
-            Label productName = (Label) scene.lookup("#productName");
-            productName.setText((String) object);
-        }
-        
         Button yes = (Button) scene.lookup("#yes");
         yes.setOnMouseClicked(e -> {
             code.run();
@@ -74,8 +86,8 @@ public class GMSAlert {
         });
     }
     
-    public void onClose(Runnable code) {
-        onCloseCode = code;
+    public void onCancelRun(Runnable code) {
+        onCancelCode = code;
     }
     
     public void setFxmlPath(String fxmlPath) {
