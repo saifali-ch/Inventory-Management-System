@@ -1,6 +1,5 @@
 package main;
 
-import com.jfoenix.controls.JFXDecorator;
 import database.DBConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,8 +17,6 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         DBConnection.createConnection();
-        
-        
         Parent root = FXMLLoader.load(getClass().getResource("/views/Menu.fxml"));
 //        JFXDecorator decorator = new JFXDecorator(stage, root);
 //        decorator.setCustomMaximize(true);
