@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.QuadCurve?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="748.0" style="-fx-background-color: #ECF0F3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.StartController">
+    <Group layoutX="-11.0" layoutY="-9.0">
+        <Button focusTraversable="false" layoutX="34.0" layoutY="37.0" mnemonicParsing="false" prefHeight="180.0" prefWidth="190.0" style="-fx-background-radius: 60px; -fx-background-color: #ECF0F3;" text="front 1" textFill="WHITE">
+            <effect>
+                <DropShadow color="WHITE" height="62.5" offsetX="-10.0" offsetY="-10.0" radius="27.625" spread="0.11" width="50.0" />
+            </effect>
+        </Button>
+        <Button focusTraversable="false" layoutX="34.0" layoutY="37.0" mnemonicParsing="false" prefHeight="180.0" prefWidth="190.0" style="-fx-background-radius: 60px; -fx-background-color: #ECF0F3;" text="back 1" textFill="#0fffff14">
+            <effect>
+                <DropShadow color="#cacccfd1" height="82.57" offsetX="10.0" offsetY="10.0" radius="40.9825" spread="0.11" width="83.36" />
+            </effect>
+            <font>
+                <Font size="22.0" />
+            </font>
+        </Button>
+        <Button focusTraversable="false" layoutX="82.0" layoutY="87.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="95.0" style="-fx-background-radius: 60px; -fx-background-color: #ECF0F3;" text="front 2" textFill="WHITE">
+            <effect>
+                <DropShadow color="WHITE" height="62.5" offsetX="-10.0" offsetY="-10.0" radius="27.625" spread="0.11" width="50.0" />
+            </effect>
+        </Button>
+        <Button focusTraversable="false" layoutX="82.0" layoutY="87.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="95.0" style="-fx-background-radius: 60px; -fx-background-color: #ECF0F3;" text="back 2" textFill="#0fffff15">
+            <effect>
+                <DropShadow color="#cacccfd2" height="81.77" offsetX="10.0" offsetY="10.0" radius="40.7825" spread="0.11" width="83.36" />
+            </effect>
+            <font>
+                <Font size="22.0" />
+            </font>
+        </Button>
+        <Label layoutX="122.0" layoutY="36.0" prefHeight="15.0" prefWidth="14.0" text="12" textFill="#334150">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Label layoutX="216.0" layoutY="119.0" prefHeight="17.0" prefWidth="10.0" text="3" textFill="#334150">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Label layoutX="36.0" layoutY="119.0" prefHeight="17.0" prefWidth="8.0" text="9" textFill="#334150">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Label layoutX="125.0" layoutY="200.0" prefHeight="17.0" prefWidth="8.0" text="6" textFill="#334150">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Line endX="-100.0" endY="99.80001831054688" layoutX="229.0" layoutY="37.0" startX="-100.0" startY="27.800018310546875" stroke="#f26377" strokeWidth="2.0" />
+        <Line endX="-31.000015258789062" layoutX="219.0" layoutY="126.0" startX="-100.0" stroke="#615252" />
+        <Circle fill="#334150" layoutX="4.0" layoutY="12.0" radius="52.0" stroke="#334150" strokeType="INSIDE" />
+    </Group>
+    <Button focusTraversable="false" layoutX="499.0" layoutY="52.0" mnemonicParsing="false" prefHeight="499.0" prefWidth="484.0" style="-fx-background-radius: 300px; -fx-background-color: #ECF0F3;" text="front 1" textFill="WHITE" AnchorPane.bottomAnchor="-31.19999999999999" AnchorPane.leftAnchor="499.0" AnchorPane.rightAnchor="-235.0" AnchorPane.topAnchor="52.0">
+        <effect>
+            <DropShadow color="WHITE" height="62.5" offsetX="-10.0" offsetY="-10.0" radius="27.625" spread="0.11" width="50.0" />
+        </effect>
+    </Button>
+    <Button focusTraversable="false" layoutX="178.0" layoutY="238.0" mnemonicParsing="false" prefHeight="162.0" prefWidth="190.0" style="-fx-background-radius: 120px; -fx-background-color: #ECF0F3;" text="start" textFill="#bababa" AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="349.0" AnchorPane.topAnchor="238.0">
+        <effect>
+            <DropShadow color="WHITE" height="50.2" offsetX="-10.0" offsetY="-10.0" radius="24.55" spread="0.11" width="50.0">
+                <input>
+                    <DropShadow color="#cacccf" height="83.32" offsetX="10.0" offsetY="10.0" radius="41.17" spread="0.11" width="83.36" />
+                </input>
+            </DropShadow>
+        </effect>
+        <font>
+            <Font name="Segoe UI" size="35.0" />
+        </font>
+    </Button>
+    <Button focusTraversable="false" layoutX="272.0" layoutY="28.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="303.0" style="-fx-background-radius: 60px; -fx-background-color: #ECF0F3;" text="Faizi Traders" textFill="#334150">
+        <effect>
+            <InnerShadow color="WHITE" offsetX="-10.0" offsetY="-10.0">
+                <input>
+                    <InnerShadow color="#cacccf" offsetX="10.0" offsetY="10.0" />
+                </input>
+            </InnerShadow>
+        </effect>
+        <font>
+            <Font size="37.0" />
+        </font>
+    </Button>
+    <Button focusTraversable="false" layoutX="228.0" layoutY="286.0" mnemonicParsing="false" prefHeight="111.0" prefWidth="121.0" style="-fx-background-radius: 60px; -fx-background-color: #ECF0F3;" textFill="#750ac9">
+        <effect>
+            <InnerShadow color="WHITE" offsetX="-10.0" offsetY="-10.0">
+                <input>
+                    <InnerShadow color="#cacccf" offsetX="10.0" offsetY="10.0" />
+                </input>
+            </InnerShadow>
+        </effect>
+        <font>
+            <Font size="37.0" />
+        </font>
+    </Button>
+    <Circle fill="#00000006" layoutX="763.0" layoutY="305.0" radius="252.0" stroke="#334150" strokeType="INSIDE" strokeWidth="3.0" AnchorPane.bottomAnchor="-37.0" AnchorPane.leftAnchor="511.0" AnchorPane.rightAnchor="-267.0" AnchorPane.topAnchor="53.0">
+        <effect>
+            <Bloom threshold="0.0">
+                <input>
+                    <Glow level="0.0" />
+                </input>
+            </Bloom>
+        </effect>
+    </Circle>
+    <Circle fill="#334150" layoutX="46.0" layoutY="506.0" radius="100.0" stroke="#334150" strokeType="INSIDE" strokeWidth="2.0" />
+    <Polygon fill="#334150" layoutX="693.0" layoutY="-13.0" points="-79.39996337890625, 12.99999713897705, 88.800048828125, 48.59999465942383, 29.0, -11.800018310546875" stroke="#9b73ba" strokeType="INSIDE" />
+    <QuadCurve controlX="-11.0" controlY="-66.20001220703125" endX="73.199951171875" endY="46.60003662109375" fill="#334150" layoutX="459.0" layoutY="493.0" startX="-71.79998779296875" startY="36.20001220703125" stroke="#334150" strokeType="INSIDE" />
+    <ImageView fitHeight="325.0" fitWidth="150.0" layoutX="584.0" layoutY="114.0">
+        <Image url="@../media/StartGirl.png" />
+    </ImageView>
+    <ImageView layoutX="251.0" layoutY="301.0" AnchorPane.bottomAnchor="137.0" AnchorPane.leftAnchor="250.8" AnchorPane.rightAnchor="422.0" AnchorPane.topAnchor="301.0">
+        <Image url="@../media/StartPowerButton.png" />
+    </ImageView>
+    <JFXButton fx:id="loadMenuButton" buttonType="RAISED" layoutX="237.0" layoutY="295.0" onAction="#loadMenu" prefHeight="98.0" prefWidth="104.0" ripplerFill="#f30000" style="-fx-background-radius: 120px;" text="Power" textFill="#00000004" />
+</AnchorPane>

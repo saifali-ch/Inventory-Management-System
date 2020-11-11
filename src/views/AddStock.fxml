@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="604.0" prefWidth="1262.0" style="-fx-background-color: -gms-background;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddStockController">
+    <stylesheets>
+        <URL value="@../stylesheets/Product.css" />
+        <URL value="@../stylesheets/Stock.css" />
+    </stylesheets>
+    <HBox layoutX="10.0" layoutY="50.0" spacing="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <StackPane prefHeight="32.0" prefWidth="350.0">
+            <TextField fx:id="searchBar_field" prefWidth="418.0" promptText="Search..." stylesheets="@../stylesheets/Product.css" StackPane.alignment="CENTER">
+                <opaqueInsets>
+                    <Insets />
+                </opaqueInsets>
+                <StackPane.margin>
+                    <Insets />
+                </StackPane.margin>
+            </TextField>
+            <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
+                <StackPane.margin>
+                    <Insets left="5.0" />
+                </StackPane.margin>
+                <Image url="@../media/unused/icons8_search_26px.png" />
+            </ImageView>
+            <Label fx:id="searchBar_label" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" StackPane.alignment="CENTER_RIGHT" />
+        </StackPane>
+        <ComboBox fx:id="filterCategory_box" onAction="#filterProductsByCategory" prefHeight="30.0" prefWidth="260.0" promptText="Search by Category" styleClass="combo-box" stylesheets="@../stylesheets/Product.css">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ComboBox>
+        <HBox prefHeight="32.0">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-text" text="Total Products" textFill="TRANSPARENT">
+                <padding>
+                    <Insets left="5.0" right="5.0" />
+                </padding>
+            </Label>
+            <Label fx:id="totalProducts_label" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" textFill="TRANSPARENT">
+                <padding>
+                    <Insets right="5.0" />
+                </padding>
+            </Label>
+        </HBox>
+    </HBox>
+    <TableView fx:id="product_table" editable="true" fixedCellSize="30.0" layoutX="10.0" layoutY="100.0" prefHeight="529.0" prefWidth="826.0" stylesheets="@../stylesheets/controls/TableView.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="55.0">
+        <columns>
+            <TableColumn fx:id="id_col" prefWidth="60.0" resizable="false" text="#ID" />
+            <TableColumn fx:id="name_col" editable="false" prefWidth="200.0" resizable="false" text="Product Name" />
+            <TableColumn fx:id="category_col" editable="false" prefWidth="125.0" resizable="false" text="Category" />
+            <TableColumn fx:id="description_col" editable="false" prefWidth="321.0" resizable="false" sortable="false" text="Description" />
+            <TableColumn fx:id="action_col" editable="false" prefWidth="101.0" resizable="false" sortable="false" text="Action" />
+        </columns>
+    </TableView>
+    <VBox alignment="CENTER" layoutX="854.0" layoutY="55.0" styleClass="vbox" AnchorPane.leftAnchor="855.0" AnchorPane.topAnchor="10.0">
+        <HBox style="-fx-background-radius: 7;">
+            <effect>
+                <DropShadow color="#d7dde5" offsetY="10.0" />
+            </effect>
+            <VBox.margin>
+                <Insets bottom="20.0" />
+            </VBox.margin>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <Label id="heading2" alignment="CENTER" prefWidth="372.8" text="Product Details">
+                <HBox.margin>
+                    <Insets />
+                </HBox.margin>
+            </Label>
+        </HBox>
+        <HBox>
+            <VBox.margin>
+                <Insets left="10.0" right="10.0" />
+            </VBox.margin>
+            <VBox alignment="CENTER_RIGHT" spacing="10.0">
+                <padding>
+                    <Insets bottom="10.0" right="10.0" />
+                </padding>
+                <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Product ID" />
+                <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Product Name" />
+                <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Category" />
+                <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Description" />
+            </VBox>
+            <VBox spacing="10.0">
+                <JFXTextField focusColor="#405aa800" labelFloat="true" prefWidth="215.0" promptText="Product ID" unFocusColor="#4d4d4d00">
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </JFXTextField>
+                <JFXTextField focusColor="#405aa800" labelFloat="true" prefWidth="215.0" promptText="Product Name" unFocusColor="#4d4d4d00">
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </JFXTextField>
+                <JFXTextField focusColor="#405aa800" labelFloat="true" prefWidth="215.0" promptText="Product Category" unFocusColor="#4d4d4d00">
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </JFXTextField>
+                <JFXTextField focusColor="#405aa800" labelFloat="true" layoutX="10.0" layoutY="10.0" prefWidth="215.0" promptText="Short Description" unFocusColor="#4d4d4d00">
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </JFXTextField>
+            </VBox>
+        </HBox>
+    </VBox>
+    <VBox alignment="CENTER" layoutX="855.0" layoutY="328.0" styleClass="vbox" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="855.0" AnchorPane.topAnchor="300.0">
+        <HBox style="-fx-background-radius: 7;">
+            <VBox.margin>
+                <Insets bottom="20.0" />
+            </VBox.margin>
+            <effect>
+                <DropShadow color="#d7dde5" offsetY="10.0" />
+            </effect>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <Label id="heading2" alignment="CENTER" prefHeight="42.0" prefWidth="372.8" text="Stock Details">
+                <HBox.margin>
+                    <Insets />
+                </HBox.margin>
+            </Label>
+        </HBox>
+        <HBox>
+            <VBox.margin>
+                <Insets left="10.0" right="10.0" />
+            </VBox.margin>
+            <VBox alignment="CENTER_RIGHT" spacing="10.0">
+                <padding>
+                    <Insets bottom="10.0" right="10.0" />
+                </padding>
+                <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Date" />
+                <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Notify On" />
+                <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Quantity" />
+                <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Total Price" />
+            </VBox>
+            <VBox spacing="10.0">
+                <JFXDatePicker fx:id="datePicker" defaultColor="TRANSPARENT" prefHeight="32.0" prefWidth="250.0" promptText="13/04/2001" styleClass="date-picker">
+                    <tooltip>
+                        <Tooltip text="Select or Enter Product Buy Date" />
+                    </tooltip>
+                </JFXDatePicker>
+                <JFXTextField focusColor="#405aa800" labelFloat="true" prefWidth="250.0" promptText="Minimum Product Limit" unFocusColor="#4d4d4d00">
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </JFXTextField>
+                <JFXTextField focusColor="#405aa800" labelFloat="true" prefWidth="250.0" promptText="Product Quantity" unFocusColor="#4d4d4d00">
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </JFXTextField>
+                <JFXTextField focusColor="#405aa800" labelFloat="true" prefWidth="250.0" promptText="Total Price" unFocusColor="#4d4d4d00">
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </JFXTextField>
+            </VBox>
+        </HBox>
+        <HBox spacing="10.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" />
+            </padding>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+            <JFXButton buttonType="RAISED" layoutX="20.0" layoutY="10.0" prefHeight="36.0" prefWidth="170.0" text="Update" />
+            <JFXButton buttonType="RAISED" layoutX="20.0" layoutY="10.0" prefHeight="36.0" prefWidth="170.0" text="Add" />
+        </HBox>
+    </VBox>
+</AnchorPane>

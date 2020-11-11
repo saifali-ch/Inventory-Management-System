@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1236.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BackupController">
+   <children>
+      <TableView layoutX="25.0" layoutY="14.0" prefHeight="634.0" prefWidth="1194.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <columns>
+            <TableColumn prefWidth="75.0" text="Id no" />
+            <TableColumn prefWidth="104.80001831054688" text="Product name" />
+            <TableColumn prefWidth="81.60002136230469" text="Price" />
+            <TableColumn prefWidth="71.20001220703125" text="Quantity" />
+            <TableColumn prefWidth="76.0" text="Category" />
+            <TableColumn prefWidth="83.199951171875" text="Description" />
+         </columns>
+      </TableView>
+      <ComboBox layoutX="503.0" layoutY="669.0" prefHeight="30.0" prefWidth="155.0" />
+      <Button focusTraversable="false" layoutX="1097.0" layoutY="661.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="83.0" style="-fx-background-radius: 120px; -fx-background-color: #F1DD6F;" text="Sell" textFill="#2c2929" AnchorPane.rightAnchor="55.799999999999955">
+         <effect>
+            <DropShadow color="WHITE" height="50.1" offsetX="-10.0" offsetY="-10.0" radius="24.525" spread="0.11" width="50.0">
+               <input>
+                  <DropShadow color="#cacccf" height="83.34" offsetX="10.0" offsetY="10.0" radius="41.175" spread="0.11" width="83.36" />
+               </input>
+            </DropShadow>
+         </effect>
+         <font>
+            <Font name="Segoe UI Bold" size="23.0" />
+         </font>
+      </Button>
+      <Button focusTraversable="false" layoutX="55.0" layoutY="657.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="83.0" style="-fx-background-radius: 120px; -fx-background-color: #F1DD6F;" text="Sell" textFill="#2c2929" AnchorPane.leftAnchor="55.0">
+         <effect>
+            <DropShadow color="WHITE" height="50.1" offsetX="-10.0" offsetY="-10.0" radius="24.525" spread="0.11" width="50.0">
+               <input>
+                  <DropShadow color="#cacccf" height="83.34" offsetX="10.0" offsetY="10.0" radius="41.175" spread="0.11" width="83.36" />
+               </input>
+            </DropShadow>
+         </effect>
+         <font>
+            <Font name="Segoe UI Bold" size="23.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

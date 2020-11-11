@@ -1,0 +1,21 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="CssUnknownProperty" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myCustomPropertiesEnabled" value="true" />
+      <option name="myIgnoreVendorSpecificProperties" value="false" />
+      <option name="myCustomPropertiesList">
+        <value>
+          <list size="6">
+            <item index="0" class="java.lang.String" itemvalue="-gms-background" />
+            <item index="1" class="java.lang.String" itemvalue="-gms-dark" />
+            <item index="2" class="java.lang.String" itemvalue="-gms-light" />
+            <item index="3" class="java.lang.String" itemvalue="-gms-font" />
+            <item index="4" class="java.lang.String" itemvalue="-gms-font-family" />
+            <item index="5" class="java.lang.String" itemvalue="-gms-dark-low" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

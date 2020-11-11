@@ -1,0 +1,28 @@
+/***********************************************
+                    Text Field
+************************************************/
+@import "../theme/ColorSchemeAndFont.css";
+
+.text-field {
+    -fx-prompt-text-fill    : -gms-dark-low;
+    -fx-highlight-fill      : derive(-gms-dark, 100%);
+    -fx-highlight-text-fill : -gms-dark;
+    -fx-text-fill           : -gms-dark;
+    -fx-background-color    : -gms-light;
+    -fx-font-family         : -gms-font-family;
+    -fx-font-size           : 15;
+    -fx-background-radius   : 7;
+    -fx-border-color        : -gms-dark;
+    -fx-border-radius       : 7;
+    -fx-border-style        : dashed;
+    -fx-border-width        : 1;
+    -fx-pref-height         : 32;
+    -fx-padding             : 0 0 0 5;
+}
+
+#searchBar_field {
+    -fx-padding : 0 50 0 33;
+}
+
+/***********************************************/
+

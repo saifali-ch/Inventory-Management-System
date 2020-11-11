@@ -1,0 +1,38 @@
+/*Dark*/
+* {
+    -gms-background  : #FFFFFF;
+    -gms-light       : #D7DDE5;
+    -gms-dark        : #334150;
+    -gms-dark-low    : derive(-gms-dark, 25%);
+    -gms-font-family : "Bahnschrift";
+}
+
+
+/*!*Charcoal*!*/
+/** {*/
+/*	-gms-background : #FFFFFF;*/
+/*	-gms-light      : #D7DDE5;*/
+/*	-gms-dark       : #334150;*/
+/*	-gms-dark-low   : derive(-gms-dark, 25%);*/
+/*-gms-font-family : "Bahnschrift";*/
+/*}*/
+
+
+/*!*Light Grey*!*/
+/** {*/
+/*	-gms-background : #FFFFFF;*/
+/*	-gms-light      : #D7DDE5;*/
+/*	-gms-dark       : #4A4A4A;*/
+/*	-gms-dark-low   : derive(-gms-dark, 25%);*/
+/*-gms-font-family : "Bahnschrift";*/
+/*}*/
+
+
+/*!*Prussian Blue*!*/
+/** {*/
+/*	-gms-background : #FFFFFF;*/
+/*	-gms-light      : #D7DDE5;*/
+/*	-gms-dark       : #1D3557;*/
+/*	-gms-dark-low   : derive(-gms-dark, 25%);*/
+/*-gms-font-family : "Bahnschrift";*/
+/*}*/

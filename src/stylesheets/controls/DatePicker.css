@@ -1,0 +1,137 @@
+/***********************************************
+                    Date Picker
+************************************************/
+@import "../theme/ColorSchemeAndFont.css";
+@import "Scrollbars.css";
+
+/*date-popup or date-picker-popup - both are valid to use*/
+/*.date-picker .date-picker-popup .calendar-grid .day-...*/
+/*.date-picker or just .day-cell - both are valid to use*/
+
+.date-picker {
+    -jfx-default-color : -gms-dark-low;
+}
+
+.date-picker .tooltip {
+    -fx-background-color : -gms-light;
+    -fx-text-fill        : -gms-dark-low;
+}
+
+.date-picker .text-field {
+    -jfx-unfocus-color    : transparent;
+    -jfx-focus-color      : transparent;
+    -fx-border-width      : 0;
+    -fx-background-radius : 7 0 0 7;
+    -fx-padding           : 0 0 0 5;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color : -gms-dark-low;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color : -gms-dark;
+}
+
+/*Icon of Date Picker */
+.date-picker .arrow {
+    -fx-background-color : -gms-light;
+}
+
+.date-picker .date-picker-popup {
+    -fx-background-radius : 7;
+    -fx-background-color  : -gms-background;
+}
+
+.date-picker .month-year-pane {
+    -fx-background-radius : 7;
+    -fx-background-insets : 7;
+    -fx-pref-height       : 90;
+    -fx-min-height        : 90;
+}
+
+.date-picker .spinner {
+    /*-fx-alignment : left;*/
+    -fx-alignment : center;
+}
+
+.date-picker .spinner .label {
+    -fx-font-size : 22;
+}
+
+/*November 2020*/
+.date-picker .spinner-label {
+}
+
+/*Left and Right Buttons in Calender*/
+.date-picker .button {
+    -fx-background-color  : -gms-background;
+    -jfx-button-type      : FLAT;
+    -fx-cursor            : HAND;
+    -fx-background-radius : 7;
+}
+
+
+/***********************************************
+			DatePicker Calender
+************************************************/
+.calendar-grid {
+    -fx-padding     : 0 10 -30 12;
+    -fx-pref-width  : 250;
+    -fx-pref-height : 200;
+}
+
+/*S M T W T F S*/
+.day-name-cell {
+    -fx-padding     : 0 0 0 0;
+    -fx-font-family : -gms-font-family;
+    -fx-font-size   : 15;
+    -fx-font-weight : bold;
+    -fx-text-fill   : -gms-dark-low;
+}
+
+.day-cell {
+    -fx-font-family : -gms-font-family;
+    -fx-font-size   : 14;
+    -fx-font-weight : bold;
+    -fx-text-fill   : -gms-dark-low;
+}
+
+.day-cell:hover {
+    -fx-background-color  : -gms-light;
+    -fx-background-radius : 7;
+    -fx-cursor            : hand;
+}
+
+.day-cell:focused {
+    -fx-text-fill         : -gms-background;
+    -fx-background-color  : -gms-dark-low;
+    -fx-background-radius : 7;
+}
+
+.day-cell:empty {
+    -fx-border-color : transparent;
+}
+
+/***********************************************
+			DatePicker Year ListView
+************************************************/
+.data-picker-list-cell {
+    -fx-background-color : -gms-background;
+    -fx-text-fill        : -gms-dark-low;
+    -fx-cursor           : HAND;
+}
+
+.data-picker-list-cell:hover {
+    -fx-background-color : -gms-light;
+}
+
+.data-picker-list-cell:focused {
+    -fx-text-fill : -gms-dark-low;
+}
+
+.data-picker-list-cell .jfx-rippler {
+    -jfx-rippler-fill : -gms-dark;
+}
+
+/***********************************************/

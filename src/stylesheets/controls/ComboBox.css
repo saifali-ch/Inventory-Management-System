@@ -1,0 +1,59 @@
+/***********************************************
+                    ComboBox
+************************************************/
+@import "../theme/ColorSchemeAndFont.css";
+@import "Scrollbars.css";
+
+.combo-box {
+    -fx-font-size         : 15;
+    -fx-font-family       : -gms-font-family;
+    -fx-background-color  : -gms-light;
+    -fx-background-radius : 7;
+}
+
+.combo-box .text {
+    -fx-fill : -gms-dark;
+}
+
+.combo-box .arrow {
+    -fx-background-color : -gms-light;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color : -gms-dark-low;
+}
+
+.combo-box .arrow-button:hover {
+    -fx-background-color : -gms-dark;
+}
+
+.combo-box .placeholder .label {
+    -fx-font-size   : 15;
+    -fx-font-weight : normal;
+}
+
+/***********************************************
+				ComboBox Popup List
+************************************************/
+#box190 .list-view {
+    -fx-pref-width : 190;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color : -gms-light;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color : -gms-background;
+}
+
+.combo-box-popup .list-view .list-cell:selected,
+.combo-box-popup .list-view .list-cell:hover:selected {
+    -fx-background-color : -gms-light;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color : -gms-light;
+}
+
+/************************************************/

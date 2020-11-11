@@ -1,0 +1,50 @@
+/***********************************************
+                    Label
+************************************************/
+@import "../theme/ColorSchemeAndFont.css";
+
+.label {
+    -fx-font-family : -gms-font-family;
+    -fx-text-fill   : -gms-dark-low;
+    -fx-font-size   : 18;
+    -fx-font-weight : bold;
+}
+
+.gms-label-var {
+    -fx-background-color  : -gms-dark-low;
+    -fx-text-fill         : -gms-light;
+    -fx-background-radius : 0 7 7 0;
+    -fx-pref-width        : 50;
+}
+
+.gms-label-text {
+    -fx-background-color : -gms-background;
+    -fx-text-fill        : -gms-dark-low;
+    -fx-border-color     : -gms-dark-low;
+    -fx-border-style     : dotted;
+    -fx-border-radius    : 7 0 0 7;
+}
+
+.integer-label {
+
+}
+
+#heading {
+    -fx-font-family : "OCR A Extended";
+    -fx-font-size   : 29;
+    -fx-pref-height : 30;
+}
+
+#heading2 {
+    -fx-background-color  : -gms-background;
+    -fx-background-radius : 10;
+    -fx-padding           : 0 0 5 0;
+    -fx-font-family       : "OCR A Extended";
+    -fx-font-size         : 30;
+    -fx-border-color      : -gms-light;
+    -fx-border-style      : dotted;
+    -fx-border-radius     : 10;
+    -fx-pref-height       : 30;
+}
+
+/************************************************/

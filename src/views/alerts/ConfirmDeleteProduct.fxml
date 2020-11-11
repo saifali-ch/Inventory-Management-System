@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.alert.ConfirmDeleteProductController">
+    <children>
+        <JFXButton fx:id="yes" buttonType="RAISED" focusTraversable="false" layoutX="50.0" layoutY="350.0" prefHeight="38.0" prefWidth="125.0" ripplerFill="WHITE" style="-fx-background-color: derive(red, -10%); -fx-font-size: 18; -fx-font-weight: bold;" text="Yes" textFill="WHITE">
+         <font>
+            <Font name="Segoe UI Bold" size="18.0" />
+         </font></JFXButton>
+        <JFXButton fx:id="no" focusTraversable="false" layoutX="225.0" layoutY="350.0" prefHeight="38.0" prefWidth="125.0" stylesheets="@../../stylesheets/Product.css" text="No" />
+        <Label id="heading" alignment="CENTER" layoutY="11.0" prefHeight="38.0" prefWidth="400.0" style="-fx-font-size: 20; -fx-font-family: System;" text="Are You Sure to Delete this Product?" wrapText="true">
+            <font>
+                <Font size="40.0" />
+            </font>
+        </Label>
+        <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="125.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../media/icons/4x/delete.png" />
+            </image>
+        </ImageView>
+      <HBox layoutX="10.0" layoutY="230.0" prefHeight="100.0" prefWidth="380.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="160.0">
+               <children>
+                    <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="150.0" text="Product ID" />
+                    <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="150.0" text="Product Name" />
+                    <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="150.0" text="Product Category" />
+               </children>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="220.0">
+               <children>
+                    <Label fx:id="id" prefHeight="30.0" prefWidth="220.0" text="Product ID Here" />
+                    <Label fx:id="name" prefHeight="30.0" prefWidth="220.0" text="Product Name Here" />
+                    <Label fx:id="category" prefHeight="30.0" prefWidth="220.0" text="Product Category Here" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+    </children>
+</AnchorPane>

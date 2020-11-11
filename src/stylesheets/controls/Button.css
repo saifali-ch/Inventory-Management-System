@@ -1,0 +1,27 @@
+/***********************************************
+                    Button
+************************************************/
+@import "../theme/ColorSchemeAndFont.css";
+
+.button {
+    -fx-text-fill         : -gms-light;
+    -fx-background-color  : -gms-dark-low;
+    -fx-background-radius : 7;
+    -fx-pref-height       : 36;
+    -fx-font-size         : 17;
+    -fx-font-weight       : bold;
+    -fx-font-family       : -gms-font-family;
+    -jfx-button-type      : RAISED;
+    -fx-cursor            : hand;
+}
+
+.button:hover {
+    -fx-background-color : -gms-dark;
+}
+
+.button:disabled {
+    -jfx-button-type : FLAT;
+    -fx-opacity      : 0.8;
+}
+
+/************************************************/

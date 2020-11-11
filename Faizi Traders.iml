@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/media" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="javafx-swt" level="application" />
+    <orderEntry type="library" name="jfoenix-9.0.9" level="application" />
+    <orderEntry type="library" name="mysql-connector-java-8.0.21" level="application" />
+    <orderEntry type="library" name="ojdbc6" level="application" />
+    <orderEntry type="library" name="controlsfx-11.0.2" level="application" />
+  </component>
+</module>

@@ -1,0 +1,44 @@
+/*****************************************************
+Themes & Fonts Must be imported Before Other Stylesheets
+******************************************************/
+@import "theme/ColorSchemeAndFont.css";
+/***********************************************
+                    Controls
+************************************************/
+@import "controls/Button.css";
+@import "controls/Label.css";
+
+#paneName_label {
+    -fx-font-size        : 40;
+    -fx-background-color : -gms-background;
+}
+
+
+#sidebar {
+    -fx-background-color  : -gms-dark;
+    -fx-background-radius : 0 30 30 0;
+}
+
+.button {
+    -fx-background-radius : 20 0 0 20;
+    -fx-font-size         : 16;
+}
+
+.button:hover {
+    -fx-background-color : derive(-gms-dark, -30%);
+}
+
+.circle {
+    -fx-fill         : -gms-light;
+    -fx-border-color : -gms-light;
+}
+
+.ellipse {
+    -fx-fill : -gms-dark;
+}
+
+.hbox {
+    -fx-background-radius : 20 0 0 20;
+    -fx-background-color  : -gms-light;
+}
+

@@ -1,0 +1,400 @@
+package controllers;
+
+import alert.AlertType;
+import alert.GMSAlert;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextArea;
+import database.DBConnection;
+import javafx.beans.InvalidationListener;
+import javafx.beans.binding.BooleanBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.skin.ComboBoxListViewSkin;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import models.Product;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class ProductController {
+    public static final ObservableList<String> allCategory_list = FXCollections.observableArrayList();
+    public static final ObservableList<Product> allProduct_list = FXCollections.observableArrayList();
+    public static final ObservableList<String> filterCategory_list = FXCollections.observableArrayList();
+    public static final ObservableList<Product> filteredProduct_list = FXCollections.observableArrayList();
+    public TableView<Product> product_table;
+    public TableColumn<Product, Integer> id_col;
+    public TableColumn<Product, String> name_col;
+    public TableColumn<Product, String> category_col;
+    public TableColumn<Product, String> description_col;
+    public TableColumn<Product, Button> action_col;
+    public ComboBox<String> filterCategory_box;
+    public ComboBox<String> deleteCategory_box;
+    public ComboBox<String> productCategory_box;
+    public TextField searchBar_field;
+    public TextField productName_field;
+    public TextField categoryName_field;
+    public JFXTextArea productDescription_field;
+    public JFXButton addProduct_btn;
+    public JFXButton addCategory_btn;
+    public JFXButton deleteCategory_btn;
+    public Label totalProducts_label;
+    public Label searchBar_label;
+    private Product globalProduct_obj; // Used to update product
+    
+    public void initialize() {
+        createTable();
+        configComboBoxes();
+        addListenersAndFormValidators();
+        loadProducts();
+        loadAllCategories();
+        loadFilterCategories();
+    }
+    
+    private void createTable() {
+        product_table.setPlaceholder(new Label("No Product Available"));
+        id_col.setCellValueFactory(new PropertyValueFactory<>("id"));
+        name_col.setCellValueFactory(new PropertyValueFactory<>("name"));
+        category_col.setCellValueFactory(new PropertyValueFactory<>("category"));
+        description_col.setCellValueFactory(new PropertyValueFactory<>("description"));
+        action_col.setCellFactory(p -> new TableCell<>() {
+            HBox hbox = null;
+            
+            {
+                try {
+                    hbox = FXMLLoader.load(getClass().getResource("/views/ActionColumn.fxml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                hbox.setOnMouseEntered(e -> hbox.setCursor(Cursor.HAND));
+                
+                StackPane delete_pane = (StackPane) hbox.lookup("#delete_pane");
+                delete_pane.setOnMouseClicked(e -> deleteProduct());
+                
+                StackPane update_pane = (StackPane) hbox.lookup("#update_pane");
+                update_pane.setOnMouseClicked(e -> {
+//                    globalProduct = getTableView().getItems().get(getIndex());
+                    globalProduct_obj = getTableRow().getItem();
+                    productCategory_box.getSelectionModel().select(globalProduct_obj.getCategory());
+                    productName_field.setText(globalProduct_obj.getName());
+                    productDescription_field.setText(globalProduct_obj.getDescription());
+                });
+            }
+            
+            @Override
+            protected void updateItem(Button button, boolean empty) {
+                super.updateItem(button, empty);
+                setGraphic(empty ? null : hbox);
+            }
+        });
+    }
+    
+    private void configComboBoxes() {
+        productCategory_box.setOnShowing(this::comboBoxScrollConfig);
+        deleteCategory_box.setOnShowing(this::comboBoxScrollConfig);
+        filterCategory_box.setOnShowing(this::comboBoxScrollConfig);
+        Label label2 = new Label("Empty Category List");
+        Label label = new Label("Empty Category List");
+        productCategory_box.setPlaceholder(label);
+        deleteCategory_box.setPlaceholder(label2);
+    }
+    
+    private void addListenersAndFormValidators() {
+        FilteredList<Product> filteredList = new FilteredList<>(filteredProduct_list);
+        
+        // Creating search bar filter
+        searchBar_field.textProperty().addListener((o, v1, v2) -> {
+            filteredList.setPredicate(p -> v2.isBlank() || p.getName().toLowerCase().contains(v2.toLowerCase()));
+        });
+        
+        // Connecting search bar filter with the table
+        SortedList<Product> sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(product_table.comparatorProperty());
+        product_table.setItems(sortedList);
+        
+        // Updates total no of products after search filter is applied
+        filteredList.addListener((InvalidationListener) o -> {
+            searchBar_label.setText(String.valueOf(filteredList.size()));
+            if (filteredList.size() <= 19)
+                description_col.setPrefWidth(335);
+            else
+                description_col.setPrefWidth(320);
+        });
+        
+        // Updates total no products
+        allProduct_list.addListener((InvalidationListener) c -> {
+            String listSize = String.valueOf(allProduct_list.size());
+            totalProducts_label.setText(listSize);
+        });
+        
+        addCategory_btn.setDisable(true);
+        deleteCategory_btn.setDisable(true);
+        addProduct_btn.setDisable(true);
+        
+        // Add Category Button will be disabled if category name is blank or empty
+        this.categoryName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            addCategory_btn.setDisable(newValue.trim().isEmpty());
+        });
+        
+        // Delete category button will be disabled if category being deleted is not selected.
+        BooleanBinding delCatSelected = deleteCategory_box.getSelectionModel().selectedIndexProperty().isEqualTo(-1);
+        deleteCategory_btn.disableProperty().bind(delCatSelected);
+        
+        // Product name field will be disabled if product category is not selected.
+        BooleanBinding proCatSelected = productCategory_box.getSelectionModel().selectedIndexProperty().isEqualTo(-1);
+        this.productName_field.disableProperty().bind(proCatSelected);
+        
+        // Add products button will be disabled if product name is blank or empty
+        this.productName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            addProduct_btn.setDisable(newValue.trim().isEmpty());
+        });
+    }
+    
+    private void loadProducts() {
+        String query = "select p.id, p.name, c.name, description from product p, category c where p.category_id = c.id order by 1";
+        try {
+            ResultSet rs = DBConnection.executeQuery(query);
+            allProduct_list.clear();
+            filteredProduct_list.clear();
+            while (rs.next()) {
+                Product product = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+                allProduct_list.add(product);
+            }
+        } catch (SQLException sqlException) {
+            System.out.println("Load Products Exception = " + sqlException.getMessage());
+        }
+        filteredProduct_list.addAll(allProduct_list);
+    }
+    
+    private void loadAllCategories() {
+        String query = "Select name from category order by name";
+        try {
+            ResultSet rs = DBConnection.executeQuery(query);
+            allCategory_list.clear();
+            while (rs.next())
+                allCategory_list.add(rs.getString(1));
+        } catch (SQLException sqlException) {
+            System.out.println("Load All Categories Exception = " + sqlException.getMessage());
+        }
+        productCategory_box.setItems(allCategory_list);
+        deleteCategory_box.setItems(allCategory_list);
+    }
+    
+    private void loadFilterCategories() {
+        String query = "select distinct c.name from product p, category c where p.category_id = c.id order by c.name";
+        try {
+            ResultSet rs = DBConnection.executeQuery(query);
+            filterCategory_list.clear();
+            filterCategory_list.add(0, "All");
+            while (rs.next())
+                filterCategory_list.add(rs.getString(1));
+        } catch (SQLException sqlException) {
+            System.out.println("Load Filter Categories Exception = " + sqlException.getMessage());
+        }
+        filterCategory_box.setItems(filterCategory_list);
+        filterCategory_box.getSelectionModel().select("All");
+    }
+    
+    @FXML
+    void deleteProduct() {
+        Product product = product_table.getSelectionModel().getSelectedItem();
+        GMSAlert deleteAlert = new GMSAlert(AlertType.DELETE_PRODUCT);
+        deleteAlert.setFxmlPath("/views/alerts/ConfirmDeleteProduct.fxml");
+        deleteAlert.setObject(product);
+        deleteAlert.show().onYes(() -> {
+            allProduct_list.remove(product);
+            filteredProduct_list.remove(product);
+            long count = allProduct_list.stream()
+                    .filter(p -> p.getCategory().equals(product.getCategory()))
+                    .count();
+            if (count == 0) {
+                filterCategory_list.remove(product.getCategory());
+                filterCategory_box.getSelectionModel().select("All");
+            }
+            String query = String.format("Delete from product where id = %d", product.getId());
+            try {
+                DBConnection.executeUpdate(query);
+            } catch (SQLException productRemove) {
+                productRemove.printStackTrace();
+            }
+        });
+    }
+    
+    private void comboBoxScrollConfig(Event event) {
+        ComboBox<?> comboBox = (ComboBox<?>) event.getTarget();
+        ListView<?> listView = (ListView<?>) ((ComboBoxListViewSkin<?>) comboBox.getSkin()).getPopupContent();
+        listView.scrollTo(comboBox.getSelectionModel().getSelectedIndex());
+    }
+    
+    @FXML
+    void addCategory(ActionEvent event) throws SQLException {
+        String categoryName = this.categoryName_field.getText().trim();
+        boolean categoryAlreadyExists = false;
+        for (String s : allCategory_list) {
+            if (s.equalsIgnoreCase(categoryName)) {
+                categoryAlreadyExists = true;
+                break;
+            }
+        }
+        if (categoryAlreadyExists) {
+            String alertString = String.format("Category \"%s\" Already Exists!", categoryName);
+            new Alert(Alert.AlertType.WARNING, alertString).showAndWait();
+            this.categoryName_field.requestFocus();
+            this.categoryName_field.selectAll();
+        } else {
+            String query = String.format("insert into category values(cat_seq.nextval, '%s')", categoryName);
+            DBConnection.executeUpdate(query);
+            allCategory_list.add(categoryName);
+            this.categoryName_field.clear();
+            productCategory_box.getSelectionModel().selectLast();
+        }
+    }
+    
+    @FXML
+    void deleteCategory(ActionEvent event) throws SQLException {
+        List<Integer> productIDList = new ArrayList<>();
+        String categoryBeingDeleted = deleteCategory_box.getValue();
+        
+        allProduct_list.forEach(product -> {
+            if (product.getCategory().equals(categoryBeingDeleted))
+                productIDList.add(product.getId());
+        });
+        
+        if (productIDList.size() > 0) {
+            String oldCatSelected = filterCategory_box.getValue();
+            filterCategory_box.getSelectionModel().select(categoryBeingDeleted); // Show products of the selected category in table
+            GMSAlert alert = new GMSAlert(AlertType.DELETE_CATEGORY);
+            alert.setFxmlPath("/views/alerts/ConfirmDeleteCategory.fxml");
+            alert.setObject(productIDList.size());
+            alert.show().onYes(() -> {
+                allProduct_list.removeAll(filteredProduct_list); // Deleting local copy of the products of the selected category
+                filteredProduct_list.clear(); // Deleting all the products from table
+                for (var i : productIDList) { // deleting all the products of selected category from database
+                    try {
+                        DBConnection.executeUpdate("Delete from product where id = " + i);
+                    } catch (SQLException sqlException) {
+                        sqlException.printStackTrace();
+                    }
+                }
+                allCategory_list.remove(categoryBeingDeleted);
+                filterCategory_list.remove(categoryBeingDeleted);
+                try {
+                    DBConnection.executeUpdate(String.format("Delete from category where name = '%s'", categoryBeingDeleted));
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+                
+                //Following statement must be executed at the end of all statements
+                filterCategory_box.getSelectionModel().select("All");
+            });
+            alert.onClose(() -> filterCategory_box.getSelectionModel().select(oldCatSelected));
+        } else { // If no products exists in the selected category
+            allCategory_list.remove(categoryBeingDeleted);
+            DBConnection.executeUpdate(String.format("Delete from category where name = '%s'", categoryBeingDeleted));
+        }
+    }
+    
+    @FXML
+    void updateProduct(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Update Product");
+        alert.setContentText("Are you sure to update the product");
+        Optional<ButtonType> option = alert.showAndWait();
+        option.ifPresent(e -> {
+            if (option.get().getText().equalsIgnoreCase("ok")) {
+                int productID = globalProduct_obj.getId();
+                String productName = this.productName_field.getText();
+                String productCategory = this.productCategory_box.getValue();
+                String productDescription = this.productDescription_field.getText();
+                globalProduct_obj.setName(productName);
+                globalProduct_obj.setCategory(productCategory);
+                globalProduct_obj.setDescription(productDescription);
+                try {
+                    // Get id of the selected category from Category Table to Insert into Product Table
+                    String categoryIdQuery = String.format("Select id from category where name='%s'", productCategory);
+                    int categoryID = DBConnection.getIntResult(categoryIdQuery);
+                    
+                    // Updating Product details in database
+                    String query = String.format("Update product set name='%s', category_id=%d, description='%s' where id=%d",
+                            productName, categoryID, productDescription, productID);
+                    
+                    // Clears Product & Description Fields
+                    productName_field.clear();
+                    productDescription_field.clear();
+                    DBConnection.executeQuery(query);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+            }
+        });
+    }
+    
+    @FXML
+    void filterProductsByCategory(ActionEvent event) {
+        String categorySelected = filterCategory_box.getValue();
+        if (categorySelected == null)
+            return;
+        filteredProduct_list.clear();
+        if (categorySelected.equals("All")) {
+            filteredProduct_list.addAll(allProduct_list);
+        } else allProduct_list.stream() // Convert to Stream
+                .filter(p -> p.getCategory().equals(categorySelected)) // Removes/Filters products whose category doesn't match
+                .forEach(filteredProduct_list::add); // Add all the remaining products to filtered product list
+    }
+    
+    @FXML
+    void addProduct(ActionEvent event) {
+        String productName = this.productName_field.getText().trim();
+        GMSAlert alert = new GMSAlert(AlertType.ADD_PRODUCT);
+        alert.setFxmlPath("/views/alerts/ConfirmAddProduct.fxml");
+        alert.setObject(productName);
+        alert.show().onYes(() -> {
+            String productCategory = productCategory_box.getValue();
+            String productDescription = this.productDescription_field.getText().trim();
+            productDescription = productDescription.isEmpty() ? "Description not Provided" : productDescription;
+            int lastPid = -1;
+            try {
+                // Get id of the selected category from Category Table to Insert into Product Table
+                String categoryIdQuery = String.format("Select id from category where name='%s'", productCategory);
+                int categoryID = DBConnection.getIntResult(categoryIdQuery);
+                
+                // AutoIncrement via Sequence, Inserting product into database
+                String query = String.format("Insert into product values(pro_seq.nextval, '%s', %d, '%s')", productName, categoryID, productDescription);
+                DBConnection.executeUpdate(query);
+                
+                // Getting Id of the Last Inserted Product to show inside table
+                String idQuery = "SELECT MAX(id) FROM product";
+                lastPid = DBConnection.getIntResult(idQuery);
+            } catch (SQLException sqlException) {
+                System.out.println("Add Product Exception = " + sqlException.getMessage());
+            }
+            
+            // Adding product to local copy of products.
+            Product p = new Product(lastPid, productName, productCategory, productDescription);
+            allProduct_list.add(p);
+            filteredProduct_list.add(p);
+            
+            // Check weather category already exists in FilterCategoryList if not exists add it.
+            if (!filterCategory_list.contains(productCategory))
+                filterCategory_list.add(productCategory);
+            
+            // Clears ProductName & Description Fields
+            productName_field.clear();
+            productDescription_field.clear();
+        });
+    }
+}
+

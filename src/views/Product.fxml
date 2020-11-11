@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1236.0" style="-fx-background-color: -gms-background;" stylesheets="@../stylesheets/Product.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProductController">
+    <HBox layoutX="10.0" layoutY="20.0" spacing="15.0" AnchorPane.topAnchor="10.0">
+        <StackPane prefHeight="32.0" prefWidth="350.0">
+            <TextField fx:id="searchBar_field" prefWidth="418.0" promptText="Search..." stylesheets="@../stylesheets/Product.css" StackPane.alignment="CENTER">
+                <opaqueInsets>
+                    <Insets />
+                </opaqueInsets>
+                <StackPane.margin>
+                    <Insets />
+                </StackPane.margin>
+            </TextField>
+            <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
+                <Image url="@../media/unused/icons8_search_26px.png" />
+                <StackPane.margin>
+                    <Insets left="5.0" />
+                </StackPane.margin>
+            </ImageView>
+            <Label fx:id="searchBar_label" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" StackPane.alignment="CENTER_RIGHT" />
+        </StackPane>
+        <ComboBox fx:id="filterCategory_box" onAction="#filterProductsByCategory" prefHeight="30.0" prefWidth="260.0" promptText="Search by Category" styleClass="combo-box" stylesheets="@../stylesheets/Product.css">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ComboBox>
+        <HBox prefHeight="32.0">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-text" text="Total Products" textFill="TRANSPARENT">
+                    <padding>
+                        <Insets left="5.0" right="5.0" />
+                    </padding>
+                </Label>
+                <Label fx:id="totalProducts_label" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" textFill="TRANSPARENT">
+                    <padding>
+                        <Insets right="5.0" />
+                    </padding>
+                </Label>
+            </children>
+        </HBox>
+    </HBox>
+    <TableView fx:id="product_table" editable="true" fixedCellSize="30.0" layoutX="10.0" layoutY="70.0" prefHeight="620.0" prefWidth="825.0" stylesheets="@../stylesheets/controls/TableView.css" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="55.0">
+        <columns>
+            <TableColumn fx:id="id_col" prefWidth="60.0" resizable="false" text="#ID" />
+            <TableColumn fx:id="name_col" editable="false" prefWidth="200.0" resizable="false" text="Product Name" />
+            <TableColumn fx:id="category_col" editable="false" prefWidth="125.0" resizable="false" text="Category" />
+            <TableColumn fx:id="description_col" editable="false" prefWidth="321.0" resizable="false" sortable="false" text="Description" />
+            <TableColumn fx:id="action_col" editable="false" prefWidth="101.0" resizable="false" sortable="false" text="Action" />
+        </columns>
+    </TableView>
+    <AnchorPane layoutX="860.0" layoutY="20.0" prefHeight="700.0" prefWidth="370.0" style="-fx-background-color: -gms-background;" stylesheets="@../stylesheets/Product.css" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <Separator prefHeight="5.0" prefWidth="370.0" stylesheets="@../stylesheets/Product.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+        <Separator layoutY="40.0" prefHeight="5.0" prefWidth="370.0" stylesheets="@../stylesheets/Product.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+        <Separator layoutY="315.0" prefHeight="5.0" prefWidth="370.0" stylesheets="@../stylesheets/Product.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+        <Separator layoutY="355.0" prefHeight="5.0" prefWidth="370.0" stylesheets="@../stylesheets/Product.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+        <Separator layoutY="695.0" prefHeight="5.0" prefWidth="370.0" stylesheets="@../stylesheets/Product.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+        <Separator orientation="VERTICAL" prefHeight="700.0" prefWidth="5.0" stylesheets="@../stylesheets/Product.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+        <Separator orientation="VERTICAL" prefHeight="700.0" prefWidth="5.0" stylesheets="@../stylesheets/Product.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+        <Label alignment="CENTER" layoutY="60.0" prefHeight="32.0" stylesheets="@../stylesheets/Product.css" text="Category Name" textFill="#33404fbf" AnchorPane.rightAnchor="220.0">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="17.0" />
+            </font>
+            <padding>
+                <Insets right="5.0" />
+            </padding>
+        </Label>
+        <Label alignment="CENTER" layoutX="15.200000000000017" layoutY="381.0" prefHeight="32.0" stylesheets="@../stylesheets/Product.css" text="Select Category" textFill="#334150bf" AnchorPane.rightAnchor="220.0">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="17.0" />
+            </font>
+            <padding>
+                <Insets right="5.0" />
+            </padding>
+        </Label>
+        <ComboBox id="box190" fx:id="productCategory_box" layoutX="160.0" layoutY="381.0" prefHeight="30.0" prefWidth="190.0" promptText="Select Category" stylesheets="@../stylesheets/Product.css" visibleRowCount="5">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ComboBox>
+        <Label alignment="CENTER" layoutX="25.60000000000001" layoutY="435.0" prefHeight="32.0" stylesheets="@../stylesheets/Product.css" text="Product Name" textFill="#334150bf" AnchorPane.rightAnchor="220.0">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="17.0" />
+            </font>
+            <padding>
+                <Insets right="5.0" />
+            </padding>
+        </Label>
+        <Label alignment="CENTER" layoutX="50.400000000000006" layoutY="550.0" prefHeight="32.0" stylesheets="@../stylesheets/Product.css" text="Description" textFill="#334150bf" AnchorPane.rightAnchor="220.0">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="17.0" />
+            </font>
+            <padding>
+                <Insets right="5.0" />
+            </padding>
+        </Label>
+        <JFXTextArea fx:id="productDescription_field" focusColor="#a2a7ab00" layoutX="160.0" layoutY="490.0" prefHeight="150.0" prefWidth="190.0" promptText="Further Product Details" styleClass="text-field" stylesheets="@../stylesheets/Product.css" unFocusColor="#4d4d4d00" />
+        <JFXButton fx:id="addProduct_btn" buttonType="RAISED" layoutX="31.0" layoutY="650.0" onAction="#addProduct" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Add" textFill="#334150">
+            <font>
+                <Font name="Lato Bold" size="17.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <JFXButton buttonType="RAISED" layoutX="202.0" layoutY="650.0" onAction="#updateProduct" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Update" textFill="#334150">
+            <font>
+                <Font name="Lato Bold" size="17.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <JFXButton fx:id="addCategory_btn" buttonType="RAISED" layoutX="202.0" layoutY="110.0" onAction="#addCategory" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Add Category" textFill="#334150">
+            <font>
+                <Font name="Lato Bold" size="17.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <Label id="heading" alignment="CENTER" layoutX="5.0" layoutY="7.0" prefHeight="30.0" prefWidth="360.0" stylesheets="@../stylesheets/Product.css" text="Add Category" textFill="#33404fbf">
+            <font>
+                <Font name="OCR A Extended" size="29.0" />
+            </font>
+        </Label>
+        <Label id="heading" alignment="CENTER" layoutX="5.0" layoutY="322.0" prefHeight="30.0" prefWidth="360.0" stylesheets="@../stylesheets/Product.css" text="Add Product" textFill="#33404fbf">
+            <font>
+                <Font name="OCR A Extended" size="29.0" />
+            </font>
+        </Label>
+        <JFXButton fx:id="deleteCategory_btn" buttonType="RAISED" layoutX="202.0" layoutY="270.0" onAction="#deleteCategory" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Delete" textFill="#334150">
+            <font>
+                <Font name="Lato Bold" size="17.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <Label alignment="CENTER" layoutX="11.200000000000017" layoutY="218.0" prefHeight="32.0" stylesheets="@../stylesheets/Product.css" text="Delete Category" textFill="#33404fbf" AnchorPane.rightAnchor="220.0">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="17.0" />
+            </font>
+            <padding>
+                <Insets right="5.0" />
+            </padding>
+        </Label>
+        <ComboBox id="box190" fx:id="deleteCategory_box" layoutX="160.0" layoutY="218.0" prefHeight="30.0" prefWidth="190.0" promptText="Select Category" stylesheets="@../stylesheets/Product.css" visibleRowCount="5">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ComboBox>
+        <Label id="heading" alignment="CENTER" layoutX="5.0" layoutY="162.0" prefHeight="31.0" prefWidth="360.0" stylesheets="@../stylesheets/Product.css" text="Delete Category" textFill="#33404fbf">
+            <font>
+                <Font name="OCR A Extended" size="29.0" />
+            </font>
+        </Label>
+        <Separator layoutX="2.0" layoutY="155.0" prefHeight="5.0" prefWidth="370.0" stylesheets="@../stylesheets/Product.css" />
+        <Separator layoutX="2.0" layoutY="195.0" prefHeight="5.0" prefWidth="370.0" stylesheets="@../stylesheets/Product.css" />
+        <JFXTextField fx:id="categoryName_field" focusColor="#405aa800" layoutX="160.0" layoutY="60.0" prefHeight="32.0" prefWidth="190.0" promptText="Type Here..." unFocusColor="#4d4d4d00" />
+        <JFXTextField fx:id="productName_field" focusColor="#405aa800" layoutX="160.0" layoutY="435.0" prefHeight="32.0" prefWidth="190.0" promptText="Type Here..." unFocusColor="#4d4d4d00" />
+    </AnchorPane>
+</AnchorPane>

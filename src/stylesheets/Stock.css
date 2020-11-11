@@ -1,0 +1,28 @@
+/*****************************************************
+Themes & Fonts Must be imported Before Other Stylesheets
+******************************************************/
+@import "theme/ColorSchemeAndFont.css";
+/***********************************************
+                    Controls
+************************************************/
+@import "controls/Label.css";
+@import "controls/Button.css";
+@import "controls/ComboBox.css";
+@import "controls/TableView.css";
+@import "controls/TextField.css";
+@import "controls/Separator.css";
+@import "controls/DatePicker.css";
+
+
+/****************************************/
+
+.vbox {
+    -fx-border-color      : -gms-light;
+    -fx-border-style      : dotted;
+    -fx-border-width      : 3;
+    -fx-border-radius     : 10;
+    -fx-background-radius : 10;
+}
+
+
+

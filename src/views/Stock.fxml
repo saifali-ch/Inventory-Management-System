@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1236.0" style="-fx-background-color: white;" stylesheets="@../stylesheets/Stock.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.StockController">
+   <children>
+      <HBox layoutX="10.0" layoutY="9.0" spacing="42.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <children>
+            <VBox spacing="10.0" styleClass="vbox">
+               <children>
+                  <ComboBox fx:id="filterCategory_box" onAction="#filterStockByCategory_box" prefWidth="260.0" promptText="Search by Category" />
+                  <StackPane>
+                     <children>
+                        <TextField fx:id="searchBar_field" promptText="Search..." stylesheets="@../stylesheets/Stock.css" StackPane.alignment="CENTER">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </TextField>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
+                           <image>
+                              <Image url="@../media/unused/icons8_search_26px.png" />
+                           </image>
+                           <StackPane.margin>
+                              <Insets left="5.0" />
+                           </StackPane.margin>
+                        </ImageView>
+                        <Label fx:id="searchBar_label" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="50.0" styleClass="gms-label-var" text="1234" StackPane.alignment="CENTER_RIGHT" />
+                     </children>
+                  </StackPane>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+            <HBox styleClass="vbox">
+               <children>
+                  <VBox alignment="CENTER" layoutX="144.0" layoutY="10.0" spacing="10.0">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Start" />
+                        <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="End" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox layoutX="334.0" layoutY="10.0" spacing="10.0">
+                     <children>
+                        <JFXDatePicker fx:id="start_date" defaultColor="TRANSPARENT" prefWidth="250.0" promptText="01/01/2001" />
+                        <JFXDatePicker fx:id="end_date" prefWidth="250.0" promptText="12/12/2020" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox spacing="10.0" styleClass="vbox">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <HBox prefHeight="32.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-text" text="Total Products" textFill="TRANSPARENT">
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="totalProducts_label" alignment="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" textFill="TRANSPARENT">
+                           <padding>
+                              <Insets right="5.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox layoutX="23.0" layoutY="23.0" prefHeight="32.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="135.2" styleClass="gms-label-text" text="Total Records" textFill="TRANSPARENT">
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="totalRecords_label" alignment="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" textFill="TRANSPARENT">
+                           <padding>
+                              <Insets right="5.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox spacing="10.0" styleClass="vbox">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#printStock" prefWidth="230.0" text="Print Record">
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#AddStock" prefWidth="230.0" text="Add Stock">
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </VBox>
+         </children>
+      </HBox>
+      <TableView fx:id="stock_table" layoutX="10.0" layoutY="330.0" prefHeight="598.0" prefWidth="1216.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <columns>
+            <TableColumn fx:id="id_col" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Stock ID" />
+            <TableColumn fx:id="productName_col" maxWidth="-1.0" minWidth="200.0" prefWidth="200.0" text="Product Name" />
+            <TableColumn fx:id="productCategory_col" maxWidth="130.0" minWidth="150.0" prefWidth="150.0" text="Category" />
+            <TableColumn fx:id="dateAdded_col" minWidth="150.0" prefWidth="150.0" text="Date Added" />
+            <TableColumn fx:id="notifyOn_col" prefWidth="100.0" text="Notify On" />
+            <TableColumn fx:id="pricePerProduct_col" prefWidth="155.0" text="Price Per Product" />
+            <TableColumn fx:id="totalPrice_col" prefWidth="120.0" text="Total Price" />
+            <TableColumn fx:id="quantity_col" prefWidth="120.0" text="Quantity" />
+            <TableColumn fx:id="action_col" prefWidth="102.0" text="Action " />
+         </columns>
+      </TableView>
+   </children>
+</AnchorPane>

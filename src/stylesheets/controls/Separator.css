@@ -1,0 +1,15 @@
+/***********************************************
+                    Separator
+************************************************/
+@import "../theme/ColorSchemeAndFont.css";
+
+.separator {
+    -fx-background-color : -gms-light;
+}
+
+.separator .line {
+    -fx-border-color : -gms-light;
+    -fx-border-width : 2;
+}
+
+/************************************************/

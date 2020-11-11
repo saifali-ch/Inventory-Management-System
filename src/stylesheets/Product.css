@@ -1,0 +1,20 @@
+/*****************************************************
+Themes & Fonts Must be imported Before Other Stylesheets
+******************************************************/
+@import "theme/ColorSchemeAndFont.css";
+/***********************************************
+                    Controls
+************************************************/
+@import "controls/Label.css";
+@import "controls/Button.css";
+@import "controls/TextField.css";
+@import "controls/ComboBox.css";
+@import "controls/TableView.css";
+@import "controls/Separator.css";
+
+
+
+
+#productDescription_field {
+    -fx-pref-height : 150;
+}
