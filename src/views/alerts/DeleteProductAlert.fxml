@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.alert.ConfirmDeleteProductController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.alert.DeleteProductAlertController">
     <children>
         <JFXButton fx:id="yes" buttonType="RAISED" focusTraversable="false" layoutX="50.0" layoutY="350.0" prefHeight="38.0" prefWidth="125.0" ripplerFill="WHITE" style="-fx-background-color: derive(red, -10%); -fx-font-size: 18; -fx-font-weight: bold;" text="Yes" textFill="WHITE">
          <font>

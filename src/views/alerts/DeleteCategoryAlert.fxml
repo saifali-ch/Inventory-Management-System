@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.alert.ConfirmDeleteCategoryController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.alert.DeleteCategoryAlertController">
     <children>
         <JFXButton fx:id="yes" buttonType="RAISED" focusTraversable="false" layoutX="50.0" layoutY="350.0" prefHeight="38.0" prefWidth="125.0" ripplerFill="WHITE" style="-fx-background-color: derive(red, -10%); -fx-font-size: 18; -fx-font-weight: bold;" text="Delete" textFill="WHITE" />
         <JFXButton fx:id="no" focusTraversable="false" layoutX="225.0" layoutY="350.0" prefHeight="38.0" prefWidth="125.0" text="Cancel">

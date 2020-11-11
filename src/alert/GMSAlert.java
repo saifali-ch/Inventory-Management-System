@@ -60,9 +60,8 @@ public class GMSAlert {
             name.setText(product.getName());
             category.setText(product.getCategory());
         } else if (alertType == AlertType.DELETE_CATEGORY) {
-            int totalNoOfProducts = (int) object;
             Label totalProduct_lbl = (Label) scene.lookup("#totalProducts");
-            totalProduct_lbl.setText(String.valueOf(totalNoOfProducts));
+            totalProduct_lbl.setText(String.valueOf((int) object));
         } else if (alertType == AlertType.ADD_PRODUCT) {
             Label productName = (Label) scene.lookup("#productName");
             productName.setText((String) object);

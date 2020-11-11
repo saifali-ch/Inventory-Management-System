@@ -212,7 +212,7 @@ public class ProductController {
     void deleteProduct() {
         Product product = product_table.getSelectionModel().getSelectedItem();
         GMSAlert deleteAlert = new GMSAlert(AlertType.DELETE_PRODUCT);
-        deleteAlert.setFxmlPath("/views/alerts/ConfirmDeleteProduct.fxml");
+        deleteAlert.setFxmlPath("/views/alerts/DeleteProductAlert.fxml");
         deleteAlert.setObject(product);
         deleteAlert.show().onYes(() -> {
             allProduct_list.remove(product);
@@ -277,7 +277,7 @@ public class ProductController {
             String oldCatSelected = filterCategory_box.getValue();
             filterCategory_box.getSelectionModel().select(categoryBeingDeleted); // Show products of the selected category in table
             GMSAlert alert = new GMSAlert(AlertType.DELETE_CATEGORY);
-            alert.setFxmlPath("/views/alerts/ConfirmDeleteCategory.fxml");
+            alert.setFxmlPath("/views/alerts/DeleteCategoryAlert.fxml");
             alert.setObject(productIDList.size());
             alert.show().onYes(() -> {
                 allProduct_list.removeAll(filteredProduct_list); // Deleting local copy of the products of the selected category
@@ -359,7 +359,7 @@ public class ProductController {
     void addProduct(ActionEvent event) {
         String productName = this.productName_field.getText().trim();
         GMSAlert alert = new GMSAlert(AlertType.ADD_PRODUCT);
-        alert.setFxmlPath("/views/alerts/ConfirmAddProduct.fxml");
+        alert.setFxmlPath("/views/alerts/AddProductAlert.fxml");
         alert.setObject(productName);
         alert.show().onYes(() -> {
             String productCategory = productCategory_box.getValue();
