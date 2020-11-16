@@ -11,7 +11,7 @@ import javafx.scene.layout.StackPane;
 import models.Product;
 
 public class SearchFilter<T> {
-    public static int matchedRecords = 0;
+    private Integer matchedRecords = 0;
     private Runnable codeToAdjustColumnWidth = null;
     
     public SearchFilter(StackPane searchBar, TableView<T> tableView, ObservableList<T> list) {
@@ -41,5 +41,9 @@ public class SearchFilter<T> {
     
     public void setCodeToAdjustColumnWidth(Runnable codeToAdjustColumnWidth) {
         this.codeToAdjustColumnWidth = codeToAdjustColumnWidth;
+    }
+    
+    public int getMatchedRecords() {
+        return matchedRecords;
     }
 }
