@@ -2,7 +2,7 @@ package util;
 
 import javafx.scene.control.TextField;
 
-public enum NumberOnly {
+public enum NumberTextField {
     ;
     
     public static void makeFieldsNumberOnly(TextField... textFields) {

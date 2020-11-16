@@ -14,7 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import models.Product;
-import util.NumberOnly;
+import util.NumberTextField;
 import util.SearchFilter;
 
 
@@ -50,8 +50,8 @@ public class AddStockController {
         filterCategory_box.getSelectionModel().select("All");
         
         totalProducts_label.setText(String.valueOf(allProduct_list.size()));
-        
-        NumberOnly.makeFieldsNumberOnly(notifyOn_field, quantity_field, totalPrice_field);
+    
+        NumberTextField.makeFieldsNumberOnly(notifyOn_field, quantity_field, totalPrice_field);
         
         // All the product related fields are view only. So, make them un-editable
         productID_field.setEditable(false);
