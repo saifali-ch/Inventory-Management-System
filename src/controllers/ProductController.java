@@ -30,10 +30,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class ProductController {
-    public static final ObservableList<String> allCategory_list = FXCollections.observableArrayList();
-    public static final ObservableList<Product> allProduct_list = FXCollections.observableArrayList();
-    public static final ObservableList<String> filterCategory_list = FXCollections.observableArrayList();
-    public static final ObservableList<Product> filteredProduct_list = FXCollections.observableArrayList();
     public TableView<Product> product_table;
     public TableColumn<Product, Integer> id_col;
     public TableColumn<Product, String> name_col;
@@ -51,6 +47,10 @@ public class ProductController {
     public JFXButton deleteCategory_btn;
     public Label totalProducts_label;
     public StackPane searchBar;
+    public static final ObservableList<String> allCategory_list = FXCollections.observableArrayList();
+    public static final ObservableList<Product> allProduct_list = FXCollections.observableArrayList();
+    public static final ObservableList<String> filterCategory_list = FXCollections.observableArrayList();
+    public static final ObservableList<Product> filteredProduct_list = FXCollections.observableArrayList();
     private Product globalProduct_obj; // Used to update product
     
     public void initialize() {
@@ -113,7 +113,7 @@ public class ProductController {
     private void createSearchFilter() {
         SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
         searchFilter.setCodeToAdjustColumnWidth(() -> {
-                    if (SearchFilter.matchedRecords <= 19)
+                    if (searchFilter.getMatchedRecords() <= 19)
                         description_col.setPrefWidth(335);
                     else
                         description_col.setPrefWidth(320);
