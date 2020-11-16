@@ -2,8 +2,6 @@ package controllers;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
-import javafx.beans.InvalidationListener;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,35 +11,43 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import models.Product;
 import util.SearchFilter;
 
 
 public class AddStockController {
-    private static final ObservableList<Product> allProduct_list = FXCollections.observableArrayList();
-    private static final ObservableList<String> filterCategory_list = FXCollections.observableArrayList();
-    private static final ObservableList<Product> filteredProduct_list = FXCollections.observableArrayList();
+    private static final ObservableList<Product> allProduct_list = ProductController.allProduct_list;
+    private static final ObservableList<Product> filteredProduct_list = ProductController.filteredProduct_list;
+    private static final ObservableList<String> filterCategory_list = ProductController.filterCategory_list;
     public TableView<Product> product_table;
     public TableColumn<Product, Integer> id_col;
     public TableColumn<Product, String> name_col;
     public TableColumn<Product, String> category_col;
     public TableColumn<Product, String> description_col;
     public TableColumn<Product, String> action_col;
-    public TextField searchBar_field;
     public ComboBox<String> filterCategory_box;
-    public Label searchBar_label;
     public Label totalProducts_label;
-    public JFXDatePicker datePicker;
+    
+    public JFXTextField productID_field;
     public JFXTextField productName_field;
     public JFXTextField productCategory_field;
     public JFXTextField productDescription_txt;
-    public JFXTextField productID_field;
+    
+    public JFXDatePicker stock_date;
+    public JFXTextField notifyOn_field;
+    public JFXTextField quantity_field;
+    public JFXTextField totalPrice_field;
+    public StackPane searchBar;
     
     public void initialize() {
         createTable();
         createSearchFilter();
-        loadData();
-        addListeners();
+        
+        filterCategory_box.setItems(filterCategory_list);
+        filterCategory_box.getSelectionModel().select("All");
+        
+        totalProducts_label.setText(String.valueOf(allProduct_list.size()));
         
         productID_field.setEditable(false);
         productName_field.setEditable(false);
@@ -87,31 +93,14 @@ public class AddStockController {
     }
     
     private void createSearchFilter() {
-        new SearchFilter<>(searchBar_field, searchBar_label, product_table, filteredProduct_list,
-                () -> {
+        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
+        searchFilter.setCodeToAdjustColumnWidth(() -> {
                     if (SearchFilter.matchedRecords <= 19)
                         description_col.setPrefWidth(335);
                     else
                         description_col.setPrefWidth(320);
-                });
-    }
-    
-    private void loadData() {
-        allProduct_list.addAll(ProductController.allProduct_list);
-        
-        filteredProduct_list.addAll(ProductController.filteredProduct_list);
-        filterCategory_list.addAll(ProductController.filterCategory_list);
-        
-        filterCategory_box.setItems(filterCategory_list);
-        filterCategory_box.getSelectionModel().select("All");
-    }
-    
-    private void addListeners() {
-        // Updates total no of products
-        allProduct_list.addListener((InvalidationListener) c -> {
-            String totalProducts = String.valueOf(allProduct_list.size());
-            totalProducts_label.setText(totalProducts);
-        });
+                }
+        );
     }
     
     @FXML
@@ -125,5 +114,11 @@ public class AddStockController {
         } else allProduct_list.stream() // Convert to Stream
                 .filter(p -> p.getCategory().equals(categorySelected)) // Removes/Filters products whose category doesn't match
                 .forEach(filteredProduct_list::add); // Add all the remaining products to filtered product list
+    }
+    
+    public void updateStock(ActionEvent event) {
+    }
+    
+    public void addStock(ActionEvent event) {
     }
 }

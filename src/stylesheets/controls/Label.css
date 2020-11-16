@@ -25,10 +25,6 @@
     -fx-border-radius    : 7 0 0 7;
 }
 
-.integer-label {
-
-}
-
 #heading {
     -fx-font-family : "OCR A Extended";
     -fx-font-size   : 29;

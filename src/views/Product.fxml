@@ -20,8 +20,8 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1236.0" style="-fx-background-color: -gms-background;" stylesheets="@../stylesheets/Product.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProductController">
     <HBox layoutX="10.0" layoutY="20.0" spacing="15.0" AnchorPane.topAnchor="10.0">
-        <StackPane prefHeight="32.0" prefWidth="350.0">
-            <TextField fx:id="searchBar_field" prefWidth="418.0" promptText="Search..." stylesheets="@../stylesheets/Product.css" StackPane.alignment="CENTER">
+        <StackPane fx:id="searchBar" prefHeight="32.0" prefWidth="350.0" styleClass="SearchBar">
+            <TextField prefWidth="418.0" promptText="Search..." stylesheets="@../stylesheets/Product.css" StackPane.alignment="CENTER">
                 <opaqueInsets>
                     <Insets />
                 </opaqueInsets>
@@ -29,13 +29,13 @@
                     <Insets />
                 </StackPane.margin>
             </TextField>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" StackPane.alignment="CENTER_RIGHT" />
             <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
                 <Image url="@../media/unused/icons8_search_26px.png" />
                 <StackPane.margin>
                     <Insets left="5.0" />
                 </StackPane.margin>
             </ImageView>
-            <Label fx:id="searchBar_label" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" StackPane.alignment="CENTER_RIGHT" />
         </StackPane>
         <ComboBox fx:id="filterCategory_box" onAction="#filterProductsByCategory" prefHeight="30.0" prefWidth="260.0" promptText="Search by Category" styleClass="combo-box" stylesheets="@../stylesheets/Product.css">
             <cursor>

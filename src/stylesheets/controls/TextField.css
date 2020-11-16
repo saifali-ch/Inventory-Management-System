@@ -20,7 +20,7 @@
     -fx-padding             : 0 0 0 5;
 }
 
-#searchBar_field {
+.SearchBar .text-field {
     -fx-padding : 0 50 0 33;
 }
 

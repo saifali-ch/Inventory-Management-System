@@ -12,9 +12,6 @@ Themes & Fonts Must be imported Before Other Stylesheets
 @import "controls/TableView.css";
 @import "controls/Separator.css";
 
-
-
-
 #productDescription_field {
     -fx-pref-height : 150;
 }

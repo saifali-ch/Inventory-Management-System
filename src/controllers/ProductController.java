@@ -43,7 +43,6 @@ public class ProductController {
     public ComboBox<String> filterCategory_box;
     public ComboBox<String> deleteCategory_box;
     public ComboBox<String> productCategory_box;
-    public TextField searchBar_field;
     public TextField productName_field;
     public TextField categoryName_field;
     public JFXTextArea productDescription_field;
@@ -51,7 +50,7 @@ public class ProductController {
     public JFXButton addCategory_btn;
     public JFXButton deleteCategory_btn;
     public Label totalProducts_label;
-    public Label searchBar_label;
+    public StackPane searchBar;
     private Product globalProduct_obj; // Used to update product
     
     public void initialize() {
@@ -112,13 +111,14 @@ public class ProductController {
     }
     
     private void createSearchFilter() {
-        new SearchFilter<>(searchBar_field, searchBar_label, product_table, filteredProduct_list,
-                () -> {
+        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
+        searchFilter.setCodeToAdjustColumnWidth(() -> {
                     if (SearchFilter.matchedRecords <= 19)
                         description_col.setPrefWidth(335);
                     else
                         description_col.setPrefWidth(320);
-                });
+                }
+        );
     }
     
     private void addListenersAndFormValidators() {

@@ -22,7 +22,7 @@
             <VBox spacing="10.0" styleClass="vbox">
                <children>
                   <ComboBox fx:id="filterCategory_box" onAction="#filterStockByCategory_box" prefWidth="260.0" promptText="Search by Category" />
-                  <StackPane>
+                  <StackPane fx:id="searchBar" styleClass="SearchBar">
                      <children>
                         <TextField fx:id="searchBar_field" promptText="Search..." stylesheets="@../stylesheets/Stock.css" StackPane.alignment="CENTER">
                            <opaqueInsets>
