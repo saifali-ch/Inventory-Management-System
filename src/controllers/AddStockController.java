@@ -2,6 +2,7 @@ package controllers;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,13 +14,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import models.Product;
+import util.NumberOnly;
 import util.SearchFilter;
 
 
 public class AddStockController {
-    private static final ObservableList<Product> allProduct_list = ProductController.allProduct_list;
-    private static final ObservableList<Product> filteredProduct_list = ProductController.filteredProduct_list;
-    private static final ObservableList<String> filterCategory_list = ProductController.filterCategory_list;
     public TableView<Product> product_table;
     public TableColumn<Product, Integer> id_col;
     public TableColumn<Product, String> name_col;
@@ -28,27 +27,33 @@ public class AddStockController {
     public TableColumn<Product, String> action_col;
     public ComboBox<String> filterCategory_box;
     public Label totalProducts_label;
-    
     public JFXTextField productID_field;
     public JFXTextField productName_field;
     public JFXTextField productCategory_field;
     public JFXTextField productDescription_txt;
-    
     public JFXDatePicker stock_date;
     public JFXTextField notifyOn_field;
     public JFXTextField quantity_field;
     public JFXTextField totalPrice_field;
     public StackPane searchBar;
+    private static final ObservableList<Product> allProduct_list = ProductController.allProduct_list;
+    private static final ObservableList<Product> filteredProduct_list = FXCollections.observableArrayList();
     
     public void initialize() {
         createTable();
         createSearchFilter();
         
-        filterCategory_box.setItems(filterCategory_list);
+        filteredProduct_list.clear(); // Must clear otherwise it may contain duplicate value
+        filteredProduct_list.addAll(allProduct_list);
+        
+        filterCategory_box.setItems(ProductController.filterCategory_list);
         filterCategory_box.getSelectionModel().select("All");
         
         totalProducts_label.setText(String.valueOf(allProduct_list.size()));
         
+        NumberOnly.makeFieldsNumberOnly(notifyOn_field, quantity_field, totalPrice_field);
+        
+        // All the product related fields are view only. So, make them un-editable
         productID_field.setEditable(false);
         productName_field.setEditable(false);
         productCategory_field.setEditable(false);
@@ -95,10 +100,10 @@ public class AddStockController {
     private void createSearchFilter() {
         SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
         searchFilter.setCodeToAdjustColumnWidth(() -> {
-                    if (SearchFilter.matchedRecords <= 19)
-                        description_col.setPrefWidth(335);
+                    if (searchFilter.getMatchedRecords() <= 19)
+                        description_col.setPrefWidth(376);
                     else
-                        description_col.setPrefWidth(320);
+                        description_col.setPrefWidth(363);
                 }
         );
     }
@@ -106,6 +111,9 @@ public class AddStockController {
     @FXML
     void filterProductsByCategory(ActionEvent event) {
         String categorySelected = filterCategory_box.getValue();
+        filterCategory_box.selectionModelProperty().addListener((observableValue, oldValue, newValue) -> {
+        
+        });
         if (categorySelected == null)
             return;
         filteredProduct_list.clear();

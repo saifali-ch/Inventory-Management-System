@@ -11,7 +11,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -166,11 +165,7 @@
                 <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Total Price" />
             </VBox>
             <VBox spacing="10.0">
-                <JFXDatePicker fx:id="stock_date" defaultColor="TRANSPARENT" prefHeight="32.0" prefWidth="250.0" promptText="13/04/2001" styleClass="date-picker">
-                    <tooltip>
-                        <Tooltip text="Select or Enter Product Buy Date" />
-                    </tooltip>
-                </JFXDatePicker>
+                <JFXDatePicker fx:id="stock_date" defaultColor="TRANSPARENT" prefHeight="32.0" prefWidth="250.0" promptText="13/04/2001" styleClass="date-picker" />
                 <JFXTextField fx:id="notifyOn_field" focusColor="#405aa800" prefWidth="250.0" promptText="Minimum Product Limit" unFocusColor="#4d4d4d00">
                     <padding>
                         <Insets left="5.0" />
