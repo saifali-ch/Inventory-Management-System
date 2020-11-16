@@ -1,6 +1,8 @@
 package controllers;
 
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import models.Product;
+import util.SearchFilter;
 
 
 public class AddStockController {
@@ -29,11 +32,21 @@ public class AddStockController {
     public Label searchBar_label;
     public Label totalProducts_label;
     public JFXDatePicker datePicker;
+    public JFXTextField productName_field;
+    public JFXTextField productCategory_field;
+    public JFXTextField productDescription_txt;
+    public JFXTextField productID_field;
     
     public void initialize() {
         createTable();
+        createSearchFilter();
         loadData();
         addListeners();
+        
+        productID_field.setEditable(false);
+        productName_field.setEditable(false);
+        productCategory_field.setEditable(false);
+        productDescription_txt.setEditable(false);
     }
     
     private void createTable() {
@@ -46,15 +59,23 @@ public class AddStockController {
             final HBox hbox = new HBox();
             
             {
-                hbox.setOnMouseEntered(e -> hbox.setCursor(Cursor.HAND));
+                ImageView image = new ImageView(getClass().getResource("/media/icons/2x/check.png").toExternalForm());
+                image.setFitWidth(25);
+                image.setFitHeight(25);
+                
                 hbox.setPrefWidth(50);
                 hbox.setPrefHeight(30);
-                hbox.setPadding(new Insets(12.5));
-                ImageView view = new ImageView(getClass().getResource("/media/icons/2x/check.png").toExternalForm());
-                view.setFitWidth(25);
-                view.setFitHeight(25);
-                hbox.getChildren().add(view);
-                hbox.setOnMouseClicked(e -> System.out.println("ProductPopupController.instance initializer"));
+                hbox.setPadding(new Insets(12.5)); //(HBoxPrefWidth - ImageFitWidth)/2 => (50 - 25)/2 = 12.5
+                hbox.getChildren().add(image);
+                
+                hbox.setOnMouseEntered(e -> hbox.setCursor(Cursor.HAND));
+                hbox.setOnMouseClicked(e -> {
+                    Product globalProduct_obj = getTableView().getSelectionModel().getSelectedItem();
+                    productID_field.setText(String.valueOf(globalProduct_obj.getId()));
+                    productName_field.setText(globalProduct_obj.getName());
+                    productCategory_field.setText(globalProduct_obj.getCategory());
+                    productDescription_txt.setText(globalProduct_obj.getDescription());
+                });
             }
             
             @Override
@@ -63,6 +84,16 @@ public class AddStockController {
                 setGraphic(empty ? null : hbox);
             }
         });
+    }
+    
+    private void createSearchFilter() {
+        new SearchFilter<>(searchBar_field, searchBar_label, product_table, filteredProduct_list,
+                () -> {
+                    if (SearchFilter.matchedRecords <= 19)
+                        description_col.setPrefWidth(335);
+                    else
+                        description_col.setPrefWidth(320);
+                });
     }
     
     private void loadData() {
@@ -76,7 +107,11 @@ public class AddStockController {
     }
     
     private void addListeners() {
-    
+        // Updates total no of products
+        allProduct_list.addListener((InvalidationListener) c -> {
+            String totalProducts = String.valueOf(allProduct_list.size());
+            totalProducts_label.setText(totalProducts);
+        });
     }
     
     @FXML

@@ -20,8 +20,10 @@ public class MenuController {
     @FXML
     private AnchorPane centerPane;
     
-    public void initialize() {
-    
+    public void initialize() throws IOException {
+        String path = "/views/Product.fxml";
+        cachedPanes.put(path, FXMLLoader.load(getClass().getResource(path)));
+//        centerPane.getChildren().setAll(cachedPanes.get(path));
     }
     
     public void setCenterPane(ActionEvent event) throws IOException {

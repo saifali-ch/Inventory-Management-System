@@ -1,7 +1,5 @@
 package controllers;
 
-import alert.AlertType;
-import alert.GMSAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import database.DBConnection;
@@ -9,8 +7,6 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -22,6 +18,9 @@ import javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import models.Product;
+import util.AlertType;
+import util.GMSAlert;
+import util.SearchFilter;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -58,6 +57,7 @@ public class ProductController {
     public void initialize() {
         createTable();
         configComboBoxes();
+        createSearchFilter();
         addListenersAndFormValidators();
         loadProducts();
         loadAllCategories();
@@ -106,43 +106,27 @@ public class ProductController {
         productCategory_box.setOnShowing(this::comboBoxScrollConfig);
         deleteCategory_box.setOnShowing(this::comboBoxScrollConfig);
         filterCategory_box.setOnShowing(this::comboBoxScrollConfig);
-        Label label2 = new Label("Empty Category List");
         Label label = new Label("Empty Category List");
         productCategory_box.setPlaceholder(label);
-        deleteCategory_box.setPlaceholder(label2);
+        deleteCategory_box.setPlaceholder(label);
+    }
+    
+    private void createSearchFilter() {
+        new SearchFilter<>(searchBar_field, searchBar_label, product_table, filteredProduct_list,
+                () -> {
+                    if (SearchFilter.matchedRecords <= 19)
+                        description_col.setPrefWidth(335);
+                    else
+                        description_col.setPrefWidth(320);
+                });
     }
     
     private void addListenersAndFormValidators() {
-        FilteredList<Product> filteredList = new FilteredList<>(filteredProduct_list);
-        
-        // Creating search bar filter
-        searchBar_field.textProperty().addListener((o, v1, v2) -> {
-            filteredList.setPredicate(p -> v2.isBlank() || p.getName().toLowerCase().contains(v2.toLowerCase()));
-        });
-        
-        // Connecting search bar filter with the table
-        SortedList<Product> sortedList = new SortedList<>(filteredList);
-        sortedList.comparatorProperty().bind(product_table.comparatorProperty());
-        product_table.setItems(sortedList);
-        
-        // Updates total no of products after search filter is applied
-        filteredList.addListener((InvalidationListener) o -> {
-            searchBar_label.setText(String.valueOf(filteredList.size()));
-            if (filteredList.size() <= 19)
-                description_col.setPrefWidth(335);
-            else
-                description_col.setPrefWidth(320);
-        });
-        
-        // Updates total no products
+        // Updates total no of products
         allProduct_list.addListener((InvalidationListener) c -> {
-            String listSize = String.valueOf(allProduct_list.size());
-            totalProducts_label.setText(listSize);
+            String totalProducts = String.valueOf(allProduct_list.size());
+            totalProducts_label.setText(totalProducts);
         });
-        
-        addCategory_btn.setDisable(true);
-        deleteCategory_btn.setDisable(true);
-        addProduct_btn.setDisable(true);
         
         // Add Category Button will be disabled if category name is blank or empty
         this.categoryName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {

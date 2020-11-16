@@ -112,7 +112,7 @@
             </padding>
         </Label>
         <JFXTextArea fx:id="productDescription_field" focusColor="#a2a7ab00" layoutX="160.0" layoutY="490.0" prefHeight="150.0" prefWidth="190.0" promptText="Further Product Details" styleClass="text-field" stylesheets="@../stylesheets/Product.css" unFocusColor="#4d4d4d00" />
-        <JFXButton fx:id="addProduct_btn" buttonType="RAISED" layoutX="31.0" layoutY="650.0" onAction="#addProduct" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Add" textFill="#334150">
+        <JFXButton fx:id="addProduct_btn" buttonType="RAISED" disable="true" layoutX="31.0" layoutY="650.0" onAction="#addProduct" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Add" textFill="#334150">
             <font>
                 <Font name="Lato Bold" size="17.0" />
             </font>
@@ -128,7 +128,7 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </JFXButton>
-        <JFXButton fx:id="addCategory_btn" buttonType="RAISED" layoutX="202.0" layoutY="110.0" onAction="#addCategory" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Add Category" textFill="#334150">
+        <JFXButton fx:id="addCategory_btn" buttonType="RAISED" disable="true" layoutX="202.0" layoutY="110.0" onAction="#addCategory" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Add Category" textFill="#334150">
             <font>
                 <Font name="Lato Bold" size="17.0" />
             </font>
@@ -146,7 +146,7 @@
                 <Font name="OCR A Extended" size="29.0" />
             </font>
         </Label>
-        <JFXButton fx:id="deleteCategory_btn" buttonType="RAISED" layoutX="202.0" layoutY="270.0" onAction="#deleteCategory" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Delete" textFill="#334150">
+        <JFXButton fx:id="deleteCategory_btn" buttonType="RAISED" disable="true" layoutX="202.0" layoutY="270.0" onAction="#deleteCategory" prefHeight="36.0" prefWidth="140.0" ripplerFill="#ffffffbf" stylesheets="@../stylesheets/Product.css" text="Delete" textFill="#334150">
             <font>
                 <Font name="Lato Bold" size="17.0" />
             </font>

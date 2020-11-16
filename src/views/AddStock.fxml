@@ -66,8 +66,8 @@
             <TableColumn fx:id="id_col" prefWidth="60.0" resizable="false" text="#ID" />
             <TableColumn fx:id="name_col" editable="false" prefWidth="200.0" resizable="false" text="Product Name" />
             <TableColumn fx:id="category_col" editable="false" prefWidth="125.0" resizable="false" text="Category" />
-            <TableColumn fx:id="description_col" editable="false" prefWidth="321.0" resizable="false" sortable="false" text="Description" />
-            <TableColumn fx:id="action_col" editable="false" prefWidth="101.0" resizable="false" sortable="false" text="Action" />
+            <TableColumn fx:id="description_col" editable="false" prefWidth="376.0" resizable="false" sortable="false" text="Description" />
+            <TableColumn fx:id="action_col" editable="false" prefWidth="60.0" resizable="false" sortable="false" text="Select" />
         </columns>
     </TableView>
     <VBox alignment="CENTER" layoutX="854.0" layoutY="55.0" styleClass="vbox" AnchorPane.leftAnchor="855.0" AnchorPane.topAnchor="10.0">
@@ -101,22 +101,22 @@
                 <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Description" />
             </VBox>
             <VBox spacing="10.0">
-                <JFXTextField focusColor="#405aa800" labelFloat="true" prefWidth="215.0" promptText="Product ID" unFocusColor="#4d4d4d00">
+                <JFXTextField fx:id="productID_field" focusColor="#405aa800" prefWidth="215.0" promptText="Product ID" unFocusColor="#4d4d4d00">
                     <padding>
                         <Insets left="5.0" />
                     </padding>
                 </JFXTextField>
-                <JFXTextField focusColor="#405aa800" labelFloat="true" prefWidth="215.0" promptText="Product Name" unFocusColor="#4d4d4d00">
+                <JFXTextField fx:id="productName_field" focusColor="#405aa800" prefWidth="215.0" promptText="Product Name" unFocusColor="#4d4d4d00">
                     <padding>
                         <Insets left="5.0" />
                     </padding>
                 </JFXTextField>
-                <JFXTextField focusColor="#405aa800" labelFloat="true" prefWidth="215.0" promptText="Product Category" unFocusColor="#4d4d4d00">
+                <JFXTextField fx:id="productCategory_field" focusColor="#405aa800" prefWidth="215.0" promptText="Product Category" unFocusColor="#4d4d4d00">
                     <padding>
                         <Insets left="5.0" />
                     </padding>
                 </JFXTextField>
-                <JFXTextField focusColor="#405aa800" labelFloat="true" layoutX="10.0" layoutY="10.0" prefWidth="215.0" promptText="Short Description" unFocusColor="#4d4d4d00">
+                <JFXTextField fx:id="productDescription_txt" focusColor="#405aa800" layoutX="10.0" layoutY="10.0" prefWidth="215.0" promptText="Short Description" unFocusColor="#4d4d4d00">
                     <padding>
                         <Insets left="5.0" />
                     </padding>

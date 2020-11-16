@@ -1,4 +1,4 @@
-package alert;
+package util;
 
 public enum AlertType {
     DELETE_PRODUCT,
