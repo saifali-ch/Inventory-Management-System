@@ -17,6 +17,8 @@ import models.Product;
 import util.NumberTextField;
 import util.SearchFilter;
 
+import java.time.LocalDate;
+
 
 public class AddStockController {
     public TableView<Product> product_table;
@@ -31,7 +33,7 @@ public class AddStockController {
     public JFXTextField productName_field;
     public JFXTextField productCategory_field;
     public JFXTextField productDescription_txt;
-    public JFXDatePicker stock_date;
+    public JFXDatePicker stockAdded_date;
     public JFXTextField notifyOn_field;
     public JFXTextField quantity_field;
     public JFXTextField totalPrice_field;
@@ -128,5 +130,7 @@ public class AddStockController {
     }
     
     public void addStock(ActionEvent event) {
+        Integer productID = Integer.valueOf(productID_field.getText());
+        LocalDate stockAdded = stockAdded_date.getValue();
     }
 }

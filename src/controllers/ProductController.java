@@ -129,7 +129,7 @@ public class ProductController {
         });
         
         // Add Category Button will be disabled if category name is blank or empty
-        this.categoryName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
+        categoryName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
             addCategory_btn.setDisable(newValue.trim().isEmpty());
         });
         
@@ -139,10 +139,10 @@ public class ProductController {
         
         // Product name field will be disabled if product category is not selected.
         BooleanBinding proCatSelected = productCategory_box.getSelectionModel().selectedIndexProperty().isEqualTo(-1);
-        this.productName_field.disableProperty().bind(proCatSelected);
+        productName_field.disableProperty().bind(proCatSelected);
         
         // Add products button will be disabled if product name is blank or empty
-        this.productName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
+        productName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
             addProduct_btn.setDisable(newValue.trim().isEmpty());
         });
     }
@@ -225,7 +225,7 @@ public class ProductController {
     
     @FXML
     void addCategory(ActionEvent event) throws SQLException {
-        String categoryName = this.categoryName_field.getText().trim();
+        String categoryName = categoryName_field.getText().trim();
         boolean categoryAlreadyExists = false;
         for (String s : allCategory_list) {
             if (s.equalsIgnoreCase(categoryName)) {
@@ -236,13 +236,13 @@ public class ProductController {
         if (categoryAlreadyExists) {
             String alertString = String.format("Category \"%s\" Already Exists!", categoryName);
             new Alert(Alert.AlertType.WARNING, alertString).showAndWait();
-            this.categoryName_field.requestFocus();
-            this.categoryName_field.selectAll();
+            categoryName_field.requestFocus();
+            categoryName_field.selectAll();
         } else {
             String query = String.format("insert into category values(cat_seq.nextval, '%s')", categoryName);
             DBConnection.executeUpdate(query);
             allCategory_list.add(categoryName);
-            this.categoryName_field.clear();
+            categoryName_field.clear();
             productCategory_box.getSelectionModel().selectLast();
         }
     }
@@ -300,9 +300,9 @@ public class ProductController {
         option.ifPresent(e -> {
             if (option.get().getText().equalsIgnoreCase("ok")) {
                 int productID = globalProduct_obj.getId();
-                String productName = this.productName_field.getText();
-                String productCategory = this.productCategory_box.getValue();
-                String productDescription = this.productDescription_field.getText();
+                String productName = productName_field.getText();
+                String productCategory = productCategory_box.getValue();
+                String productDescription = productDescription_field.getText();
                 globalProduct_obj.setName(productName);
                 globalProduct_obj.setCategory(productCategory);
                 globalProduct_obj.setDescription(productDescription);
@@ -310,7 +310,7 @@ public class ProductController {
                     // Get id of the selected category from Category Table to Insert into Product Table
                     String categoryIdQuery = String.format("Select id from category where name='%s'", productCategory);
                     int categoryID = DBConnection.getIntResult(categoryIdQuery);
-                    
+        
                     // Updating Product details in database
                     String query = String.format("Update product set name='%s', category_id=%d, description='%s' where id=%d",
                             productName, categoryID, productDescription, productID);
@@ -341,13 +341,13 @@ public class ProductController {
     
     @FXML
     void addProduct(ActionEvent event) {
-        String productName = this.productName_field.getText().trim();
+        String productName = productName_field.getText().trim();
         GMSAlert alert = new GMSAlert(AlertType.ADD_PRODUCT, productName);
         alert.setFxmlPath("/views/alerts/AddProductAlert.fxml");
         alert.show();
         alert.onYes(() -> {
             String productCategory = productCategory_box.getValue();
-            String productDescription = this.productDescription_field.getText().trim();
+            String productDescription = productDescription_field.getText().trim();
             productDescription = productDescription.isEmpty() ? "Description not Provided" : productDescription;
             int lastPid = -1;
             try {
