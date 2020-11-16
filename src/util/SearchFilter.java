@@ -9,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import models.Product;
+import models.Stock;
 
 public class SearchFilter<T> {
     private Integer matchedRecords = 0;
@@ -24,6 +25,8 @@ public class SearchFilter<T> {
         searchBar_field.textProperty().addListener((o, v1, v2) -> filteredList.setPredicate(p -> {
             if (p instanceof Product)
                 return ((Product) p).getName().toLowerCase().contains(v2.toLowerCase());
+            if (p instanceof Stock)
+                return ((Stock) p).getProductName().toLowerCase().contains(v2.toLowerCase());
             return v2.isBlank();
         }));
         

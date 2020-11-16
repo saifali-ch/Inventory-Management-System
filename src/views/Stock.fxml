@@ -1,46 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXDatePicker?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.layout.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1236.0" style="-fx-background-color: white;" stylesheets="@../stylesheets/Stock.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.StockController">
    <children>
-      <HBox layoutX="10.0" layoutY="9.0" spacing="42.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+      <HBox layoutX="10.0" layoutY="9.0" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <children>
             <VBox spacing="10.0" styleClass="vbox">
                <children>
-                  <ComboBox fx:id="filterCategory_box" onAction="#filterStockByCategory_box" prefWidth="260.0" promptText="Search by Category" />
+                  <ComboBox fx:id="filterCategory_box" onAction="#filterStockByCategory" prefWidth="260.0"
+                            promptText="Search by Category"/>
                   <StackPane fx:id="searchBar" styleClass="SearchBar">
                      <children>
-                        <TextField fx:id="searchBar_field" promptText="Search..." stylesheets="@../stylesheets/Stock.css" StackPane.alignment="CENTER">
+                        <TextField promptText="Search..." stylesheets="@../stylesheets/Stock.css"
+                                   StackPane.alignment="CENTER">
                            <opaqueInsets>
-                              <Insets />
+                              <Insets/>
                            </opaqueInsets>
                            <StackPane.margin>
-                              <Insets />
+                              <Insets/>
                            </StackPane.margin>
                         </TextField>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="50.0"
+                               styleClass="gms-label-var" text="1234" StackPane.alignment="CENTER_RIGHT"/>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true"
+                                   StackPane.alignment="CENTER_LEFT">
                            <image>
-                              <Image url="@../media/unused/icons8_search_26px.png" />
+                              <Image url="@../media/unused/icons8_search_26px.png"/>
                            </image>
                            <StackPane.margin>
-                              <Insets left="5.0" />
+                              <Insets left="5.0"/>
                            </StackPane.margin>
                         </ImageView>
-                        <Label fx:id="searchBar_label" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="50.0" styleClass="gms-label-var" text="1234" StackPane.alignment="CENTER_RIGHT" />
                      </children>
                   </StackPane>
                </children>
@@ -80,28 +75,33 @@
                <children>
                   <HBox prefHeight="32.0">
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-text" text="Total Products" textFill="TRANSPARENT">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-text"
+                               text="Total Products In Stock" textFill="TRANSPARENT">
                            <padding>
-                              <Insets left="5.0" right="5.0" />
+                              <Insets left="5.0" right="5.0"/>
                            </padding>
                         </Label>
-                        <Label fx:id="totalProducts_label" alignment="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" textFill="TRANSPARENT">
+                        <Label fx:id="totalProductsInStock_label" alignment="CENTER" prefHeight="32.0"
+                               styleClass="gms-label-var" text="1234" textFill="TRANSPARENT">
                            <padding>
-                              <Insets right="5.0" />
+                              <Insets right="5.0"/>
                            </padding>
                         </Label>
                      </children>
                   </HBox>
                   <HBox layoutX="23.0" layoutY="23.0" prefHeight="32.0">
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="135.2" styleClass="gms-label-text" text="Total Records" textFill="TRANSPARENT">
+                        <Label fx:id="totalStockRecords_label" alignment="CENTER_RIGHT" contentDisplay="CENTER"
+                               prefHeight="32.0" prefWidth="209.2" styleClass="gms-label-text"
+                               text="Total Stock Records" textFill="TRANSPARENT">
                            <padding>
-                              <Insets left="5.0" right="5.0" />
+                              <Insets left="5.0" right="5.0"/>
                            </padding>
                         </Label>
-                        <Label fx:id="totalRecords_label" alignment="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" textFill="TRANSPARENT">
+                        <Label fx:id="totalStockRecords_label" alignment="CENTER" prefHeight="32.0"
+                               styleClass="gms-label-var" text="1234" textFill="TRANSPARENT">
                            <padding>
-                              <Insets right="5.0" />
+                              <Insets right="5.0"/>
                            </padding>
                         </Label>
                      </children>
@@ -110,9 +110,9 @@
             </VBox>
             <VBox spacing="10.0" styleClass="vbox">
                <children>
-                  <Button mnemonicParsing="false" onAction="#printStock" prefWidth="230.0" text="Print Record">
+                  <Button mnemonicParsing="false" onAction="#printStock" prefWidth="230.0" text="Print Stock">
                      <VBox.margin>
-                        <Insets top="2.0" />
+                        <Insets top="2.0"/>
                      </VBox.margin>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#AddStock" prefWidth="230.0" text="Add Stock">
@@ -136,10 +136,10 @@
             <TableColumn fx:id="productName_col" maxWidth="-1.0" minWidth="200.0" prefWidth="200.0" text="Product Name" />
             <TableColumn fx:id="productCategory_col" maxWidth="130.0" minWidth="150.0" prefWidth="150.0" text="Category" />
             <TableColumn fx:id="dateAdded_col" minWidth="150.0" prefWidth="150.0" text="Date Added" />
-            <TableColumn fx:id="notifyOn_col" prefWidth="100.0" text="Notify On" />
+            <TableColumn fx:id="notifyOn_col" prefWidth="120.0" text="Notify On"/>
             <TableColumn fx:id="pricePerProduct_col" prefWidth="155.0" text="Price Per Product" />
             <TableColumn fx:id="totalPrice_col" prefWidth="120.0" text="Total Price" />
-            <TableColumn fx:id="quantity_col" prefWidth="120.0" text="Quantity" />
+            <TableColumn fx:id="quantity_col" prefWidth="113.0" text="Quantity"/>
             <TableColumn fx:id="action_col" prefWidth="102.0" text="Action " />
          </columns>
       </TableView>
