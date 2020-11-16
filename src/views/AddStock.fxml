@@ -113,13 +113,14 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
                 </JFXTextField>
-                <JFXTextField fx:id="productDescription_txt" focusColor="#405aa800" layoutX="10.0" layoutY="10.0" prefWidth="215.0" promptText="Short Description" unFocusColor="#4d4d4d00">
+                <JFXTextField fx:id="productDescription_txt" focusColor="#405aa800" layoutX="10.0" layoutY="10.0"
+                              prefWidth="215.0" promptText="Product Description" unFocusColor="#4d4d4d00">
                     <padding>
-                        <Insets left="5.0" />
+                        <Insets left="5.0"/>
                     </padding>
-               <cursor>
-                  <Cursor fx:constant="DEFAULT" />
-               </cursor>
+                    <cursor>
+                        <Cursor fx:constant="DEFAULT"/>
+                    </cursor>
                 </JFXTextField>
             </VBox>
         </HBox>

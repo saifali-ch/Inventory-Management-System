@@ -2,6 +2,7 @@ package controllers;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,9 +15,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import models.Product;
+import util.AlertType;
+import util.GMSAlert;
 import util.NumberTextField;
 import util.SearchFilter;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 
@@ -26,7 +30,7 @@ public class AddStockController {
     public TableColumn<Product, String> name_col;
     public TableColumn<Product, String> category_col;
     public TableColumn<Product, String> description_col;
-    public TableColumn<Product, String> action_col;
+    public TableColumn<Product, HBox> action_col;
     public ComboBox<String> filterCategory_box;
     public Label totalProducts_label;
     public JFXTextField productID_field;
@@ -90,10 +94,10 @@ public class AddStockController {
                     productDescription_txt.setText(globalProduct_obj.getDescription());
                 });
             }
-            
+    
             @Override
-            protected void updateItem(String s, boolean empty) {
-                super.updateItem(s, empty);
+            protected void updateItem(HBox hBox, boolean empty) {
+                super.updateItem(hBox, empty);
                 setGraphic(empty ? null : hbox);
             }
         });
@@ -102,10 +106,10 @@ public class AddStockController {
     private void createSearchFilter() {
         SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
         searchFilter.setCodeToAdjustColumnWidth(() -> {
-                    if (searchFilter.getMatchedRecords() <= 19)
-                        description_col.setPrefWidth(376);
-                    else
-                        description_col.setPrefWidth(363);
+            if (searchFilter.getMatchedRecords() <= 16)
+                description_col.setPrefWidth(376);
+            else
+                description_col.setPrefWidth(363);
                 }
         );
     }
@@ -113,9 +117,6 @@ public class AddStockController {
     @FXML
     void filterProductsByCategory(ActionEvent event) {
         String categorySelected = filterCategory_box.getValue();
-        filterCategory_box.selectionModelProperty().addListener((observableValue, oldValue, newValue) -> {
-        
-        });
         if (categorySelected == null)
             return;
         filteredProduct_list.clear();
@@ -130,7 +131,33 @@ public class AddStockController {
     }
     
     public void addStock(ActionEvent event) {
-        Integer productID = Integer.valueOf(productID_field.getText());
-        LocalDate stockAdded = stockAdded_date.getValue();
+        String stock = "Are you sure to Add the selected product Stock";
+        GMSAlert alert = new GMSAlert(AlertType.ADD_PRODUCT, stock);
+        alert.setFxmlPath("/views/alerts/AddProductAlert.fxml");
+        alert.show();
+        alert.onYes(() -> {
+            Integer productID = Integer.valueOf(productID_field.getText());
+            String productName = productName_field.getText();
+            String productCategory = productCategory_field.getText();
+            String productDescription = productDescription_txt.getText();
+        
+            LocalDate stockAdded = stockAdded_date.getValue();
+            Integer notifyOn = Integer.valueOf(notifyOn_field.getText());
+            Integer quantity = Integer.valueOf(quantity_field.getText());
+            Integer totalPrice = Integer.valueOf(totalPrice_field.getText());
+            Integer pricePerProduct = totalPrice / quantity;
+            int lastSid = -1;
+            try {
+                // AutoIncrement via Sequence, Inserting stock into database
+                String query = String.format("Insert into stock values(stock_seq.nextval, %d, to_date('%s', 'yyyy-mm-dd hh24:mi:ss'),'%d', '%d', '%d')", productID, stockAdded, notifyOn, totalPrice, quantity);
+                DBConnection.executeUpdate(query);
+            
+                // Getting Id of the Last Inserted Stock to show inside table
+                String idQuery = "SELECT MAX(id) FROM stock";
+                lastSid = DBConnection.getIntResult(idQuery);
+            } catch (SQLException sqlException) {
+                System.out.println("Add Stock Exception = " + sqlException.getMessage());
+            }
+        });
     }
 }

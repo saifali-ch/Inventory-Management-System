@@ -35,7 +35,7 @@ public class ProductController {
     public TableColumn<Product, String> name_col;
     public TableColumn<Product, String> category_col;
     public TableColumn<Product, String> description_col;
-    public TableColumn<Product, Button> action_col;
+    public TableColumn<Product, HBox> action_col;
     public ComboBox<String> filterCategory_box;
     public ComboBox<String> deleteCategory_box;
     public ComboBox<String> productCategory_box;
@@ -92,10 +92,10 @@ public class ProductController {
                     productDescription_field.setText(globalProduct_obj.getDescription());
                 });
             }
-            
+    
             @Override
-            protected void updateItem(Button button, boolean empty) {
-                super.updateItem(button, empty);
+            protected void updateItem(HBox hBox, boolean empty) {
+                super.updateItem(hBox, empty);
                 setGraphic(empty ? null : hbox);
             }
         });
@@ -110,41 +110,40 @@ public class ProductController {
         deleteCategory_box.setPlaceholder(label);
     }
     
+    @FXML
+    void deleteProduct() {
+        Product product = product_table.getSelectionModel().getSelectedItem();
+        GMSAlert deleteAlert = new GMSAlert(AlertType.DELETE_PRODUCT, product);
+        deleteAlert.setFxmlPath("/views/alerts/DeleteProductAlert.fxml");
+        deleteAlert.show();
+        deleteAlert.onYes(() -> {
+            allProduct_list.remove(product);
+            filteredProduct_list.remove(product);
+            long no_of_products_in_category = allProduct_list.stream()
+                    .filter(p -> p.getCategory().equals(product.getCategory()))
+                    .count();
+            if (no_of_products_in_category == 0) {
+                filterCategory_list.remove(product.getCategory());
+                filterCategory_box.getSelectionModel().select("All");
+            }
+            String query = String.format("Delete from product where id = %d", product.getId());
+            try {
+                DBConnection.executeUpdate(query);
+            } catch (SQLException productRemove) {
+                productRemove.printStackTrace();
+            }
+        });
+    }
+    
     private void createSearchFilter() {
         SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
         searchFilter.setCodeToAdjustColumnWidth(() -> {
-                    if (searchFilter.getMatchedRecords() <= 19)
+                    if (searchFilter.getMatchedRecords() <= 21)
                         description_col.setPrefWidth(335);
                     else
                         description_col.setPrefWidth(320);
                 }
         );
-    }
-    
-    private void addListenersAndFormValidators() {
-        // Updates total no of products
-        allProduct_list.addListener((InvalidationListener) c -> {
-            String totalProducts = String.valueOf(allProduct_list.size());
-            totalProducts_label.setText(totalProducts);
-        });
-        
-        // Add Category Button will be disabled if category name is blank or empty
-        categoryName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            addCategory_btn.setDisable(newValue.trim().isEmpty());
-        });
-        
-        // Delete category button will be disabled if category being deleted is not selected.
-        BooleanBinding delCatSelected = deleteCategory_box.getSelectionModel().selectedIndexProperty().isEqualTo(-1);
-        deleteCategory_btn.disableProperty().bind(delCatSelected);
-        
-        // Product name field will be disabled if product category is not selected.
-        BooleanBinding proCatSelected = productCategory_box.getSelectionModel().selectedIndexProperty().isEqualTo(-1);
-        productName_field.disableProperty().bind(proCatSelected);
-        
-        // Add products button will be disabled if product name is blank or empty
-        productName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            addProduct_btn.setDisable(newValue.trim().isEmpty());
-        });
     }
     
     private void loadProducts() {
@@ -192,28 +191,29 @@ public class ProductController {
         filterCategory_box.getSelectionModel().select("All");
     }
     
-    @FXML
-    void deleteProduct() {
-        Product product = product_table.getSelectionModel().getSelectedItem();
-        GMSAlert deleteAlert = new GMSAlert(AlertType.DELETE_PRODUCT, product);
-        deleteAlert.setFxmlPath("/views/alerts/DeleteProductAlert.fxml");
-        deleteAlert.show();
-        deleteAlert.onYes(() -> {
-            allProduct_list.remove(product);
-            filteredProduct_list.remove(product);
-            long count = allProduct_list.stream()
-                    .filter(p -> p.getCategory().equals(product.getCategory()))
-                    .count();
-            if (count == 0) {
-                filterCategory_list.remove(product.getCategory());
-                filterCategory_box.getSelectionModel().select("All");
-            }
-            String query = String.format("Delete from product where id = %d", product.getId());
-            try {
-                DBConnection.executeUpdate(query);
-            } catch (SQLException productRemove) {
-                productRemove.printStackTrace();
-            }
+    private void addListenersAndFormValidators() {
+        // Updates total no of products label
+        allProduct_list.addListener((InvalidationListener) c -> {
+            String totalProducts = String.valueOf(allProduct_list.size());
+            totalProducts_label.setText(totalProducts);
+        });
+        
+        // Add Category Button will be disabled if category name is blank or empty
+        categoryName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            addCategory_btn.setDisable(newValue.trim().isEmpty());
+        });
+        
+        // Delete category button will be disabled if category being deleted is not selected.
+        BooleanBinding delCatSelected = deleteCategory_box.getSelectionModel().selectedIndexProperty().isEqualTo(-1);
+        deleteCategory_btn.disableProperty().bind(delCatSelected);
+        
+        // Product name field will be disabled if product category is not selected.
+        BooleanBinding proCatSelected = productCategory_box.getSelectionModel().selectedIndexProperty().isEqualTo(-1);
+        productName_field.disableProperty().bind(proCatSelected);
+        
+        // Add products button will be disabled if product name is blank or empty
+        productName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            addProduct_btn.setDisable(newValue.trim().isEmpty());
         });
     }
     
@@ -310,7 +310,7 @@ public class ProductController {
                     // Get id of the selected category from Category Table to Insert into Product Table
                     String categoryIdQuery = String.format("Select id from category where name='%s'", productCategory);
                     int categoryID = DBConnection.getIntResult(categoryIdQuery);
-        
+    
                     // Updating Product details in database
                     String query = String.format("Update product set name='%s', category_id=%d, description='%s' where id=%d",
                             productName, categoryID, productDescription, productID);
