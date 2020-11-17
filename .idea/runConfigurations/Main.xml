@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Main" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="main.Main" />
+    <module name="Faizi Traders" />
+    <option name="VM_PARAMETERS" value="--add-exports javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls --add-exports javafx.graphics/com.sun.javafx.scene=org.controlsfx.controls --add-exports javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls --add-exports javafx.base/com.sun.javafx.event=org.controlsfx.controls   --add-exports javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix --add-exports javafx.controls/com.sun.javafx.scene.control=com.jfoenix --add-exports javafx.base/com.sun.javafx.binding=com.jfoenix --add-exports javafx.base/com.sun.javafx.event=com.jfoenix --add-exports javafx.graphics/com.sun.javafx.stage=com.jfoenix" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
