@@ -110,6 +110,17 @@ public class ProductController {
         deleteCategory_box.setPlaceholder(label);
     }
     
+    private void createSearchFilter() {
+        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
+        searchFilter.setCodeToAdjustColumnWidth(() -> {
+                    if (searchFilter.getMatchedRecords() <= 21)
+                        description_col.setPrefWidth(335);
+                    else
+                        description_col.setPrefWidth(320);
+                }
+        );
+    }
+    
     @FXML
     void deleteProduct() {
         Product product = product_table.getSelectionModel().getSelectedItem();
@@ -133,62 +144,6 @@ public class ProductController {
                 productRemove.printStackTrace();
             }
         });
-    }
-    
-    private void createSearchFilter() {
-        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
-        searchFilter.setCodeToAdjustColumnWidth(() -> {
-                    if (searchFilter.getMatchedRecords() <= 21)
-                        description_col.setPrefWidth(335);
-                    else
-                        description_col.setPrefWidth(320);
-                }
-        );
-    }
-    
-    private void loadProducts() {
-        String query = "select p.id, p.name, c.name, description from product p, category c where p.category_id = c.id order by 1";
-        try {
-            ResultSet rs = DBConnection.executeQuery(query);
-            allProduct_list.clear();
-            filteredProduct_list.clear();
-            while (rs.next()) {
-                Product product = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
-                allProduct_list.add(product);
-            }
-        } catch (SQLException sqlException) {
-            System.out.println("Load Products Exception = " + sqlException.getMessage());
-        }
-        filteredProduct_list.addAll(allProduct_list);
-    }
-    
-    private void loadAllCategories() {
-        String query = "Select name from category order by name";
-        try {
-            ResultSet rs = DBConnection.executeQuery(query);
-            allCategory_list.clear();
-            while (rs.next())
-                allCategory_list.add(rs.getString(1));
-        } catch (SQLException sqlException) {
-            System.out.println("Load All Categories Exception = " + sqlException.getMessage());
-        }
-        productCategory_box.setItems(allCategory_list);
-        deleteCategory_box.setItems(allCategory_list);
-    }
-    
-    private void loadFilterCategories() {
-        String query = "select distinct c.name from product p, category c where p.category_id = c.id order by c.name";
-        try {
-            ResultSet rs = DBConnection.executeQuery(query);
-            filterCategory_list.clear();
-            filterCategory_list.add(0, "All");
-            while (rs.next())
-                filterCategory_list.add(rs.getString(1));
-        } catch (SQLException sqlException) {
-            System.out.println("Load Filter Categories Exception = " + sqlException.getMessage());
-        }
-        filterCategory_box.setItems(filterCategory_list);
-        filterCategory_box.getSelectionModel().select("All");
     }
     
     private void addListenersAndFormValidators() {
@@ -215,6 +170,51 @@ public class ProductController {
         productName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
             addProduct_btn.setDisable(newValue.trim().isEmpty());
         });
+    }
+    
+    private void loadAllCategories() {
+        String query = "Select name from category order by name";
+        try {
+            ResultSet rs = DBConnection.executeQuery(query);
+            allCategory_list.clear();
+            while (rs.next())
+                allCategory_list.add(rs.getString(1));
+        } catch (SQLException sqlException) {
+            System.out.println("Load All Categories Exception = " + sqlException.getMessage());
+        }
+        productCategory_box.setItems(allCategory_list);
+        deleteCategory_box.setItems(allCategory_list);
+    }
+    
+    private void loadProducts() {
+        String query = "select * from product_view";
+        try {
+            ResultSet rs = DBConnection.executeQuery(query);
+            allProduct_list.clear();
+            filteredProduct_list.clear();
+            while (rs.next()) {
+                Product product = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+                allProduct_list.add(product);
+            }
+        } catch (SQLException sqlException) {
+            System.out.println("Load Products Exception = " + sqlException.getMessage());
+        }
+        filteredProduct_list.addAll(allProduct_list);
+    }
+    
+    private void loadFilterCategories() {
+        String query = "select * from filter_category_view";
+        try {
+            ResultSet rs = DBConnection.executeQuery(query);
+            filterCategory_list.clear();
+            filterCategory_list.add(0, "All");
+            while (rs.next())
+                filterCategory_list.add(rs.getString(1));
+        } catch (SQLException sqlException) {
+            System.out.println("Load Filter Categories Exception = " + sqlException.getMessage());
+        }
+        filterCategory_box.setItems(filterCategory_list);
+        filterCategory_box.getSelectionModel().select("All");
     }
     
     private void comboBoxScrollConfig(Event event) {

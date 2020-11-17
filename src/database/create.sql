@@ -5,28 +5,40 @@ create sequence cat_seq start with 1 increment by 1 cache 100;
 create sequence pro_seq start with 1 increment by 1 cache 100;
 create sequence stock_seq start with 1 increment by 1 cache 100;
 
+create or replace view product_view as
+select p.id id, p.name name, c.name category, description
+from product p
+         inner join category c on p.category_id = c.id
+order by 1;
+
+create or replace view filter_category_view as
+select distinct c.name
+from product p
+         join category c on p.category_id = c.id
+order by 1;
+
+
 drop table stock;
 drop table product;
 drop table category;
 create table category
 (
-    id   int primary key,
+    id   number primary key,
     name varchar2(50) unique
 );
 
 create table product
 (
-    id          int primary key,
+    id          number primary key,
     name        varchar2(50),
-    category_id int not null
-        constraint fk_category references category (id) on delete cascade,
+    category_id not null references category (id) on delete cascade,
     description varchar2(500) default 'Description not Provided'
 );
 
 create table stock
 (
-    id          int primary key,
-    pro_id      int references product (id),
+    id          number primary key,
+    pro_id      number references product (id),
     date_added  date,
     notify_on   int,
     total_price int,
@@ -103,10 +115,5 @@ Insert into product
 values (pro_seq.nextval, 'Universal', 1, 'Product desc here');
 Insert into product
 values (pro_seq.nextval, 'Volt', 2, 'Product desc here');
-
-select *
-from product;
-select *
-from category;
 
 commit
