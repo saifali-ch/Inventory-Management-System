@@ -13,6 +13,5 @@
     <orderEntry type="library" name="mysql-connector-java-8.0.21" level="application" />
     <orderEntry type="library" name="ojdbc6" level="application" />
     <orderEntry type="library" name="controlsfx-11.0.2" level="application" />
-    <orderEntry type="library" name="javafx" level="project" />
   </component>
 </module>
