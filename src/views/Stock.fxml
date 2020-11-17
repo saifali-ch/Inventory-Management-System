@@ -16,7 +16,7 @@
                             promptText="Search by Category"/>
                   <StackPane fx:id="searchBar" styleClass="SearchBar">
                      <children>
-                        <TextField promptText="Search..." stylesheets="@../stylesheets/Stock.css"
+                        <TextField promptText="Search by Product Name..." stylesheets="@../stylesheets/Stock.css"
                                    StackPane.alignment="CENTER">
                            <opaqueInsets>
                               <Insets/>

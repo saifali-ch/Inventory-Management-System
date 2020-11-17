@@ -74,7 +74,7 @@ public class StockController {
     }
     
     private void addListenersAndFormValidators() {
-        // Updates total no of products in stock label and total stock records
+        // Updates "Total Products In Stock label" and "Total Stock Records label"
         allStockList.addListener((InvalidationListener) c -> {
             int totalStockRecords = allStockList.stream().mapToInt(Stock::getQuantity).sum();
             totalProductsInStock_label.setText(String.valueOf(totalStockRecords));
