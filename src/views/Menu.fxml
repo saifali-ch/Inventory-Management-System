@@ -6,11 +6,10 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
-            prefWidth="1536.0" style="-fx-background-color: -gms-background;" stylesheets="@../stylesheets/Menu.css"
-            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="800.0" prefWidth="1536.0" style="-fx-background-color: -gms-background;"
+            stylesheets="@../stylesheets/Menu.css" xmlns="http://javafx.com/javafx/11.0.1"
             fx:controller="controllers.MenuController">
     <children>
         <HBox layoutX="305.0" layoutY="10.0" AnchorPane.leftAnchor="290.0" AnchorPane.rightAnchor="0.0"
@@ -160,16 +159,11 @@
                         </HBox>
                     </children>
                 </VBox>
-                <CubicCurve controlX1="-50.0" controlX2="50.0" controlY1="-100.0" controlY2="100.0"
-                            endX="132.20001220703125" fill="#a2a7ac" layoutX="158.0" layoutY="37.0" startX="-150.0"
-                            stroke="BLACK" styleClass="circle"/>
-                <Circle accessibleRole="BUTTON" layoutX="150.0" layoutY="174.0" radius="107.0" stroke="BLACK"
-                        strokeType="INSIDE" styleClass="circle"/>
-                <Ellipse fill="#334150" layoutX="150.0" layoutY="188.0" radiusX="100.0" radiusY="14.0" stroke="BLACK"
-                         strokeType="INSIDE" styleClass="ellipse"/>
-                <Circle fill="#334150" layoutX="236.0" layoutY="50.0" radius="9.0" stroke="#334150"
-                        strokeType="INSIDE"/>
-                <Circle fill="#334150" layoutX="72.0" layoutY="23.0" radius="9.0" stroke="#334150" strokeType="INSIDE"/>
+                <ImageView fitWidth="290.0" layoutX="4.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../media/Logo.png"/>
+                    </image>
+                </ImageView>
             </children>
         </AnchorPane>
         <AnchorPane fx:id="centerPane" layoutX="301.0" layoutY="257.0" prefHeight="740.0" prefWidth="1236.0"

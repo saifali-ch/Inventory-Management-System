@@ -91,7 +91,7 @@
                   </HBox>
                   <HBox layoutX="23.0" layoutY="23.0" prefHeight="32.0">
                      <children>
-                        <Label fx:id="totalStockRecords_label" alignment="CENTER_RIGHT" contentDisplay="CENTER"
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER"
                                prefHeight="32.0" prefWidth="209.2" styleClass="gms-label-text"
                                text="Total Stock Records" textFill="TRANSPARENT">
                            <padding>
