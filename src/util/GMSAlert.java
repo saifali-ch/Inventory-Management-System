@@ -1,16 +1,10 @@
 package util;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import models.Product;
-
-import java.io.IOException;
 
 public class GMSAlert {
     private final AlertType alertType;
@@ -30,20 +24,10 @@ public class GMSAlert {
     }
     
     public void show() {
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(getClass().getResource(fxmlPath));
-        } catch (IOException ioException) {
-            System.out.println("Unable to load FXML for Alert = " + ioException.getMessage());
-        }
-        assert root != null;
-        scene = new Scene(root);
-        stage = new Stage();
-        stage.setScene(scene);
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.initModality(Modality.APPLICATION_MODAL);
+        stage = StageHandler.createAlertStage(fxmlPath);
+        scene = stage.getScene();
         stage.show();
-        setContent();
+        setStageContent();
         Button no = (Button) scene.lookup("#no");
         no.setOnMouseClicked(e -> {
             if (onCancelCode != null)
@@ -52,7 +36,7 @@ public class GMSAlert {
         });
     }
     
-    private void setContent() {
+    private void setStageContent() {
         switch (alertType) {
             case DELETE_PRODUCT:
                 Label id = (Label) scene.lookup("#id");

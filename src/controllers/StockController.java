@@ -13,10 +13,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import models.Stock;
 import util.SearchFilter;
-
-import java.io.IOException;
+import util.StageHandler;
 
 public class StockController {
     
@@ -44,7 +44,7 @@ public class StockController {
         createTable();
         createSearchFilter();
         addListenersAndFormValidators();
-        loadData();
+        loadProducts();
         loadFilterCategories();
     }
     
@@ -84,7 +84,7 @@ public class StockController {
         });
     }
     
-    private void loadData() {
+    private void loadProducts() {
         allStockList.addAll(
                 new Stock(1, "Test", "A", "13/04/2001", 2, 200, 1233, 12),
                 new Stock(2, "Hello", "B", "13/04/2001", 2, 200, 1233, 12)
@@ -94,7 +94,6 @@ public class StockController {
     
     private void loadFilterCategories() {
         allStockList.forEach(stock -> {
-            System.out.println("stock.getProductCategory() = " + stock.getProductCategory());
             if (!filterCategory_list.contains(stock.getProductCategory()))
                 filterCategory_list.add(stock.getProductCategory());
         });
@@ -104,14 +103,10 @@ public class StockController {
     }
     
     @FXML
-    void AddStock(ActionEvent event) throws IOException {
-//        AnchorPane pane = FXMLLoader.load(getClass().getResource("/views/AddStock.fxml"));
-//        Scene scene = new Scene(pane);
-//        Stage stage = new Stage();
-//        stage.setScene(scene);
-//        stage.show();
-        filteredStock_list.remove(filteredStock_list.size() - 1);
-        allStockList.remove(allStockList.size() - 1);
+    void AddStock(ActionEvent event) {
+        String fxmlPath = "/views/AddStock.fxml";
+        Stage stage = StageHandler.createStage(fxmlPath);
+        stage.show();
     }
     
     @FXML
