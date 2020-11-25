@@ -15,7 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import models.Product;
-import util.AlertType;
 import util.GMSAlert;
 import util.NumberTextField;
 import util.SearchFilter;
@@ -106,25 +105,20 @@ public class AddStockController {
     private void createSearchFilter() {
         SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
         searchFilter.setCodeToAdjustColumnWidth(() -> {
-            if (searchFilter.getMatchedRecords() <= 16)
-                description_col.setPrefWidth(376);
-            else
-                description_col.setPrefWidth(363);
+                    if (searchFilter.getMatchedRecords() > 16)
+                        description_col.setPrefWidth(363);
+                    else description_col.setPrefWidth(376);
                 }
         );
     }
     
     @FXML
     void filterProductsByCategory(ActionEvent event) {
-        String categorySelected = filterCategory_box.getValue();
-        if (categorySelected == null)
-            return;
         filteredProduct_list.clear();
-        if (categorySelected.equals("All")) {
-            filteredProduct_list.addAll(allProduct_list);
-        } else allProduct_list.stream() // Convert to Stream
-                .filter(p -> p.getCategory().equals(categorySelected)) // Removes/Filters products whose category doesn't match
-                .forEach(filteredProduct_list::add); // Add all the remaining products to filtered product list
+        String categorySelected = filterCategory_box.getValue();
+        allProduct_list.stream()
+                .filter(p -> p.getCategory().equals(categorySelected) || categorySelected.equals("All"))
+                .forEach(filteredProduct_list::add);
     }
     
     public void updateStock(ActionEvent event) {
@@ -132,7 +126,7 @@ public class AddStockController {
     
     public void addStock(ActionEvent event) {
         String stock = "Are you sure to Add the selected product Stock";
-        GMSAlert alert = new GMSAlert(AlertType.ADD_PRODUCT, stock);
+        GMSAlert alert = new GMSAlert(GMSAlert.AlertType.ADD_PRODUCT, stock);
         alert.setFxmlPath("/views/alerts/AddProductAlert.fxml");
         alert.show();
         alert.onYes(() -> {
@@ -140,7 +134,7 @@ public class AddStockController {
             String productName = productName_field.getText();
             String productCategory = productCategory_field.getText();
             String productDescription = productDescription_txt.getText();
-        
+    
             LocalDate stockAdded = stockAdded_date.getValue();
             Integer notifyOn = Integer.valueOf(notifyOn_field.getText());
             Integer quantity = Integer.valueOf(quantity_field.getText());
@@ -151,7 +145,7 @@ public class AddStockController {
                 // AutoIncrement via Sequence, Inserting stock into database
                 String query = String.format("Insert into stock values(stock_seq.nextval, %d, to_date('%s', 'yyyy-mm-dd hh24:mi:ss'),'%d', '%d', '%d')", productID, stockAdded, notifyOn, totalPrice, quantity);
                 DBConnection.executeUpdate(query);
-            
+    
                 // Getting Id of the Last Inserted Stock to show inside table
                 String idQuery = "SELECT MAX(id) FROM stock";
                 lastSid = DBConnection.getIntResult(idQuery);

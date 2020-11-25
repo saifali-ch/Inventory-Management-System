@@ -36,7 +36,7 @@ public class StockController {
     public TableColumn<Stock, Integer> quantity_col;
     public TableColumn<Stock, HBox> action_col;
     public StackPane searchBar;
-    private static final ObservableList<Stock> allStockList = FXCollections.observableArrayList();
+    private static final ObservableList<Stock> allStock_list = FXCollections.observableArrayList();
     private static final ObservableList<Stock> filteredStock_list = FXCollections.observableArrayList();
     private static final ObservableList<String> filterCategory_list = FXCollections.observableArrayList();
     
@@ -44,7 +44,7 @@ public class StockController {
         createTable();
         createSearchFilter();
         addListenersAndFormValidators();
-        loadProducts();
+        loadStock();
         loadFilterCategories();
     }
     
@@ -65,41 +65,47 @@ public class StockController {
     private void createSearchFilter() {
         SearchFilter<Stock> searchFilter = new SearchFilter<>(searchBar, stock_table, filteredStock_list);
         searchFilter.setCodeToAdjustColumnWidth(() -> {
-                    if (searchFilter.getMatchedRecords() <= 17)
-                        quantity_col.setPrefWidth(113);
-                    else
-                        quantity_col.setPrefWidth(100);
-                }
-        );
+            if (searchFilter.getMatchedRecords() > 17)
+                quantity_col.setPrefWidth(100);
+            else quantity_col.setPrefWidth(113);
+        });
     }
     
     private void addListenersAndFormValidators() {
         // Updates "Total Products In Stock label" and "Total Stock Records label"
-        allStockList.addListener((InvalidationListener) c -> {
-            int totalStockRecords = allStockList.stream().mapToInt(Stock::getQuantity).sum();
+        allStock_list.addListener((InvalidationListener) c -> {
+            int totalStockRecords = allStock_list.stream().mapToInt(Stock::getQuantity).sum();
             totalProductsInStock_label.setText(String.valueOf(totalStockRecords));
-            
-            String totalProducts = String.valueOf(allStockList.size());
+        
+            String totalProducts = String.valueOf(allStock_list.size());
             totalStockRecords_label.setText(totalProducts);
         });
     }
     
-    private void loadProducts() {
-        allStockList.addAll(
+    private void loadStock() {
+        allStock_list.addAll(
                 new Stock(1, "Test", "A", "13/04/2001", 2, 200, 1233, 12),
                 new Stock(2, "Hello", "B", "13/04/2001", 2, 200, 1233, 12)
         );
-        filteredStock_list.addAll(allStockList);
+        filteredStock_list.addAll(allStock_list);
     }
     
     private void loadFilterCategories() {
-        allStockList.forEach(stock -> {
-            if (!filterCategory_list.contains(stock.getProductCategory()))
-                filterCategory_list.add(stock.getProductCategory());
-        });
+        allStock_list.stream()
+                .filter(stock -> !filterCategory_list.contains(stock.getProductCategory()))
+                .forEach(stock -> filterCategory_list.add(stock.getProductCategory()));
         filterCategory_box.setItems(filterCategory_list);
         filterCategory_list.add(0, "All");
         filterCategory_box.getSelectionModel().select("All");
+    }
+    
+    @FXML
+    void filterStockByCategory(ActionEvent event) {
+        filteredStock_list.clear();
+        String categorySelected = filterCategory_box.getValue();
+        allStock_list.stream()
+                .filter(p -> p.getProductCategory().equals(categorySelected) || categorySelected.equals("All"))
+                .forEach(filteredStock_list::add);
     }
     
     @FXML
@@ -110,21 +116,8 @@ public class StockController {
     }
     
     @FXML
-    void filterStockByCategory(ActionEvent event) {
-        String categorySelected = filterCategory_box.getValue();
-        if (categorySelected == null)
-            return;
-        filteredStock_list.clear();
-        if (categorySelected.equals("All")) {
-            filteredStock_list.addAll(allStockList);
-        } else allStockList.stream() // Convert to Stream
-                .filter(p -> p.getProductCategory().equals(categorySelected)) // Removes/Filters products whose category doesn't match
-                .forEach(filteredStock_list::add); // Add all the remaining products to filtered product list
-    }
-    
-    @FXML
     void printStock(ActionEvent event) {
-        allStockList.add(new Stock(3, "Test", "Test", "13/04/2001", 2, 200, 32, 10));
+        allStock_list.add(new Stock(3, "Test", "Test", "13/04/2001", 2, 200, 32, 10));
         filteredStock_list.add(new Stock(3, "Test", "Test", "13/04/2001", 2, 200, 32, 10));
     }
 }

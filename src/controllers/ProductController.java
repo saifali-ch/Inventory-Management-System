@@ -18,7 +18,6 @@ import javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import models.Product;
-import util.AlertType;
 import util.GMSAlert;
 import util.SearchFilter;
 
@@ -101,30 +100,10 @@ public class ProductController {
         });
     }
     
-    private void configComboBoxes() {
-        productCategory_box.setOnShowing(this::comboBoxScrollConfig);
-        deleteCategory_box.setOnShowing(this::comboBoxScrollConfig);
-        filterCategory_box.setOnShowing(this::comboBoxScrollConfig);
-        Label label = new Label("Empty Category List");
-        productCategory_box.setPlaceholder(label);
-        deleteCategory_box.setPlaceholder(label);
-    }
-    
-    private void createSearchFilter() {
-        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
-        searchFilter.setCodeToAdjustColumnWidth(() -> {
-                    if (searchFilter.getMatchedRecords() <= 21)
-                        description_col.setPrefWidth(335);
-                    else
-                        description_col.setPrefWidth(320);
-                }
-        );
-    }
-    
     @FXML
     void deleteProduct() {
         Product product = product_table.getSelectionModel().getSelectedItem();
-        GMSAlert deleteAlert = new GMSAlert(AlertType.DELETE_PRODUCT, product);
+        GMSAlert deleteAlert = new GMSAlert(GMSAlert.AlertType.DELETE_PRODUCT, product);
         deleteAlert.setFxmlPath("/views/alerts/DeleteProductAlert.fxml");
         deleteAlert.show();
         deleteAlert.onYes(() -> {
@@ -144,6 +123,16 @@ public class ProductController {
                 productRemove.printStackTrace();
             }
         });
+    }
+    
+    private void configComboBoxes() {
+        productCategory_box.setOnShowing(this::comboBoxScrollConfig);
+        deleteCategory_box.setOnShowing(this::comboBoxScrollConfig);
+        filterCategory_box.setOnShowing(this::comboBoxScrollConfig);
+        Label label = new Label("Empty Category List");
+        productCategory_box.setPlaceholder(label);
+        deleteCategory_box.setPlaceholder(label);
+        filterCategory_box.setPlaceholder(label);
     }
     
     private void addListenersAndFormValidators() {
@@ -172,20 +161,6 @@ public class ProductController {
         });
     }
     
-    private void loadAllCategories() {
-        String query = "Select name from category order by name";
-        try {
-            ResultSet rs = DBConnection.executeQuery(query);
-            allCategory_list.clear();
-            while (rs.next())
-                allCategory_list.add(rs.getString(1));
-        } catch (SQLException sqlException) {
-            System.out.println("Load All Categories Exception = " + sqlException.getMessage());
-        }
-        productCategory_box.setItems(allCategory_list);
-        deleteCategory_box.setItems(allCategory_list);
-    }
-    
     private void loadProducts() {
         String query = "select * from product_view";
         try {
@@ -200,6 +175,16 @@ public class ProductController {
             System.out.println("Load Products Exception = " + sqlException.getMessage());
         }
         filteredProduct_list.addAll(allProduct_list);
+    }
+    
+    private void createSearchFilter() {
+        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
+        searchFilter.setCodeToAdjustColumnWidth(() -> {
+                    if (searchFilter.getMatchedRecords() > 21)
+                        description_col.setPrefWidth(320);
+                    else description_col.setPrefWidth(335);
+                }
+        );
     }
     
     private void loadFilterCategories() {
@@ -217,10 +202,33 @@ public class ProductController {
         filterCategory_box.getSelectionModel().select("All");
     }
     
+    private void loadAllCategories() {
+        String query = "Select name from category order by name";
+        try {
+            ResultSet rs = DBConnection.executeQuery(query);
+            allCategory_list.clear();
+            while (rs.next())
+                allCategory_list.add(rs.getString(1));
+        } catch (SQLException sqlException) {
+            System.out.println("Load All Categories Exception = " + sqlException.getMessage());
+        }
+        productCategory_box.setItems(allCategory_list);
+        deleteCategory_box.setItems(allCategory_list);
+    }
+    
     private void comboBoxScrollConfig(Event event) {
         ComboBox<?> comboBox = (ComboBox<?>) event.getTarget();
         ListView<?> listView = (ListView<?>) ((ComboBoxListViewSkin<?>) comboBox.getSkin()).getPopupContent();
         listView.scrollTo(comboBox.getSelectionModel().getSelectedIndex());
+    }
+    
+    @FXML
+    void filterProductsByCategory(ActionEvent event) {
+        filteredProduct_list.clear();
+        String categorySelected = filterCategory_box.getValue();
+        allProduct_list.stream()
+                .filter(p -> p.getCategory().equals(categorySelected) || categorySelected.equals("All"))
+                .forEach(filteredProduct_list::add);
     }
     
     @FXML
@@ -260,7 +268,7 @@ public class ProductController {
         if (productIDList.size() > 0) {
             String oldCatSelected = filterCategory_box.getValue();
             filterCategory_box.getSelectionModel().select(categoryBeingDeleted); // Show products of the selected category in table
-            GMSAlert alert = new GMSAlert(AlertType.DELETE_CATEGORY, productIDList.size());
+            GMSAlert alert = new GMSAlert(GMSAlert.AlertType.DELETE_CATEGORY, productIDList.size());
             alert.setFxmlPath("/views/alerts/DeleteCategoryAlert.fxml");
             alert.show();
             alert.onYes(() -> {
@@ -327,22 +335,9 @@ public class ProductController {
     }
     
     @FXML
-    void filterProductsByCategory(ActionEvent event) {
-        String categorySelected = filterCategory_box.getValue();
-        if (categorySelected == null)
-            return;
-        filteredProduct_list.clear();
-        if (categorySelected.equals("All")) {
-            filteredProduct_list.addAll(allProduct_list);
-        } else allProduct_list.stream() // Convert to Stream
-                .filter(p -> p.getCategory().equals(categorySelected)) // Removes/Filters products whose category doesn't match
-                .forEach(filteredProduct_list::add); // Add all the remaining products to filtered product list
-    }
-    
-    @FXML
     void addProduct(ActionEvent event) {
         String productName = productName_field.getText().trim();
-        GMSAlert alert = new GMSAlert(AlertType.ADD_PRODUCT, productName);
+        GMSAlert alert = new GMSAlert(GMSAlert.AlertType.ADD_PRODUCT, productName);
         alert.setFxmlPath("/views/alerts/AddProductAlert.fxml");
         alert.show();
         alert.onYes(() -> {

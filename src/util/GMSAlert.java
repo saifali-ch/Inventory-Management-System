@@ -81,4 +81,11 @@ public class GMSAlert {
     public void setObject(Object object) {
         this.object = object;
     }
+    
+    public enum AlertType {
+        DELETE_PRODUCT,
+        DELETE_CATEGORY,
+        ADD_PRODUCT,
+        NONE,
+    }
 }
