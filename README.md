@@ -33,8 +33,9 @@ A software complying with many design rules, principles, patterns, and anti-patt
 2. Search **Run SQL Command Line** and Run.
 3. Type the following commands:
 ```SQL
-Alter User HR Account Unlock;
-Alter User HR Identified By hr;
+CONNECT SYSTEM/<password--during-installation>;
+CREATE USER GMS IDENTIFIED BY gms DEFAULT TABLESPACE USERS QUOTA UNLIMITED ON USERS;
+GRANT CREATE SESSION, CREATE TABLE, CREATE VIEW, CREATE SEQUENCE TO GMS;
 ```
 4. Add Oracle Data Source in IntelliJ IDEA, Open Query Console, and run all the queries provided in **/src/database/create.sql** file.
 
