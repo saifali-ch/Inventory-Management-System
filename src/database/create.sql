@@ -5,16 +5,12 @@ create sequence cat_seq start with 1 increment by 1 cache 100;
 create sequence pro_seq start with 1 increment by 1 cache 100;
 create sequence stock_seq start with 1 increment by 1 cache 100;
 
+drop view product_view;
+
 create or replace view product_view as
 select p.id id, p.name name, c.name category, description
 from product p
          inner join category c on p.category_id = c.id
-order by 1;
-
-create or replace view filter_category_view as
-select distinct c.name
-from product p
-         join category c on p.category_id = c.id
 order by 1;
 
 
@@ -117,3 +113,6 @@ Insert into product
 values (pro_seq.nextval, 'Volt', 2, 'Product desc here');
 
 commit
+
+select *
+from product_view;

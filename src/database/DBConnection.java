@@ -46,8 +46,8 @@ public class DBConnection {
     public static void createConnection() throws ClassNotFoundException, SQLException {
         Class.forName("oracle.jdbc.driver.OracleDriver");
         String url = "jdbc:oracle:thin:@localhost:1521:XE";
-        String username = "HR";
-        String password = "hr";
+        String username = "GMS";
+        String password = "gms";
         connection = DriverManager.getConnection(url, username, password);
         statement = connection.createStatement();
     }
