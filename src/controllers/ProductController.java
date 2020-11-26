@@ -24,9 +24,9 @@ import util.SearchFilter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ProductController {
     public TableView<Product> product_table;
@@ -58,8 +58,7 @@ public class ProductController {
         createSearchFilter();
         addListenersAndFormValidators();
         loadProducts();
-        loadAllCategories();
-        loadFilterCategories();
+        loadCategories();
     }
     
     private void createTable() {
@@ -100,31 +99,6 @@ public class ProductController {
         });
     }
     
-    @FXML
-    void deleteProduct() {
-        Product product = product_table.getSelectionModel().getSelectedItem();
-        GMSAlert deleteAlert = new GMSAlert(GMSAlert.AlertType.DELETE_PRODUCT, product);
-        deleteAlert.setFxmlPath("/views/alerts/DeleteProductAlert.fxml");
-        deleteAlert.show();
-        deleteAlert.onYes(() -> {
-            allProduct_list.remove(product);
-            filteredProduct_list.remove(product);
-            long no_of_products_in_category = allProduct_list.stream()
-                    .filter(p -> p.getCategory().equals(product.getCategory()))
-                    .count();
-            if (no_of_products_in_category == 0) {
-                filterCategory_list.remove(product.getCategory());
-                filterCategory_box.getSelectionModel().select("All");
-            }
-            String query = String.format("Delete from product where id = %d", product.getId());
-            try {
-                DBConnection.executeUpdate(query);
-            } catch (SQLException productRemove) {
-                productRemove.printStackTrace();
-            }
-        });
-    }
-    
     private void configComboBoxes() {
         productCategory_box.setOnShowing(this::comboBoxScrollConfig);
         deleteCategory_box.setOnShowing(this::comboBoxScrollConfig);
@@ -133,6 +107,16 @@ public class ProductController {
         productCategory_box.setPlaceholder(label);
         deleteCategory_box.setPlaceholder(label);
         filterCategory_box.setPlaceholder(label);
+    }
+    
+    private void createSearchFilter() {
+        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
+        searchFilter.setCodeToAdjustColumnWidth(() -> {
+                    if (searchFilter.getMatchedRecords() > 21)
+                        description_col.setPrefWidth(320);
+                    else description_col.setPrefWidth(335);
+                }
+        );
     }
     
     private void addListenersAndFormValidators() {
@@ -163,10 +147,10 @@ public class ProductController {
     
     private void loadProducts() {
         String query = "select * from product_view";
+        allProduct_list.clear();
+        filteredProduct_list.clear();
+        ResultSet rs = DBConnection.executeQuery(query);
         try {
-            ResultSet rs = DBConnection.executeQuery(query);
-            allProduct_list.clear();
-            filteredProduct_list.clear();
             while (rs.next()) {
                 Product product = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
                 allProduct_list.add(product);
@@ -175,34 +159,15 @@ public class ProductController {
             System.out.println("Load Products Exception = " + sqlException.getMessage());
         }
         filteredProduct_list.addAll(allProduct_list);
-    }
-    
-    private void createSearchFilter() {
-        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
-        searchFilter.setCodeToAdjustColumnWidth(() -> {
-                    if (searchFilter.getMatchedRecords() > 21)
-                        description_col.setPrefWidth(320);
-                    else description_col.setPrefWidth(335);
-                }
-        );
-    }
-    
-    private void loadFilterCategories() {
-        String query = "select * from filter_category_view";
-        try {
-            ResultSet rs = DBConnection.executeQuery(query);
-            filterCategory_list.clear();
-            filterCategory_list.add(0, "All");
-            while (rs.next())
-                filterCategory_list.add(rs.getString(1));
-        } catch (SQLException sqlException) {
-            System.out.println("Load Filter Categories Exception = " + sqlException.getMessage());
-        }
+        filterCategory_list.addAll(allProduct_list.stream()
+                .map(Product::getCategory)
+                .distinct()
+                .collect(Collectors.toList()));
         filterCategory_box.setItems(filterCategory_list);
         filterCategory_box.getSelectionModel().select("All");
     }
     
-    private void loadAllCategories() {
+    private void loadCategories() {
         String query = "Select name from category order by name";
         try {
             ResultSet rs = DBConnection.executeQuery(query);
@@ -216,6 +181,26 @@ public class ProductController {
         deleteCategory_box.setItems(allCategory_list);
     }
     
+    @FXML
+    void deleteProduct() {
+        Product product = product_table.getSelectionModel().getSelectedItem();
+        GMSAlert deleteAlert = new GMSAlert(GMSAlert.AlertType.DELETE_PRODUCT, product);
+        deleteAlert.show("/views/alerts/DeleteProductAlert.fxml");
+        deleteAlert.onYes(() -> {
+            allProduct_list.remove(product);
+            filteredProduct_list.remove(product);
+            long no_of_products_in_category = allProduct_list.stream()
+                    .filter(p -> p.getCategory().equals(product.getCategory()))
+                    .count();
+            if (no_of_products_in_category == 0) {
+                filterCategory_list.remove(product.getCategory());
+                filterCategory_box.getSelectionModel().select("All");
+            }
+            String query = String.format("Delete from product where id = %d", product.getId());
+            DBConnection.executeUpdate(query);
+        });
+    }
+    
     private void comboBoxScrollConfig(Event event) {
         ComboBox<?> comboBox = (ComboBox<?>) event.getTarget();
         ListView<?> listView = (ListView<?>) ((ComboBoxListViewSkin<?>) comboBox.getSkin()).getPopupContent();
@@ -226,13 +211,13 @@ public class ProductController {
     void filterProductsByCategory(ActionEvent event) {
         filteredProduct_list.clear();
         String categorySelected = filterCategory_box.getValue();
-        allProduct_list.stream()
+        filteredProduct_list.addAll(allProduct_list.stream()
                 .filter(p -> p.getCategory().equals(categorySelected) || categorySelected.equals("All"))
-                .forEach(filteredProduct_list::add);
+                .collect(Collectors.toList()));
     }
     
     @FXML
-    void addCategory(ActionEvent event) throws SQLException {
+    void addCategory(ActionEvent event) {
         String categoryName = categoryName_field.getText().trim();
         boolean categoryAlreadyExists = false;
         for (String s : allCategory_list) {
@@ -256,44 +241,31 @@ public class ProductController {
     }
     
     @FXML
-    void deleteCategory(ActionEvent event) throws SQLException {
-        List<Integer> productIDList = new ArrayList<>();
+    void deleteCategory(ActionEvent event) {
         String categoryBeingDeleted = deleteCategory_box.getValue();
-        
-        allProduct_list.forEach(product -> {
-            if (product.getCategory().equals(categoryBeingDeleted))
-                productIDList.add(product.getId());
-        });
+        List<Integer> productIDList = allProduct_list.stream()
+                .filter(p -> p.getCategory().equals(categoryBeingDeleted))
+                .map(Product::getId)
+                .collect(Collectors.toList());
         
         if (productIDList.size() > 0) {
             String oldCatSelected = filterCategory_box.getValue();
             filterCategory_box.getSelectionModel().select(categoryBeingDeleted); // Show products of the selected category in table
             GMSAlert alert = new GMSAlert(GMSAlert.AlertType.DELETE_CATEGORY, productIDList.size());
-            alert.setFxmlPath("/views/alerts/DeleteCategoryAlert.fxml");
-            alert.show();
+            alert.show("/views/alerts/DeleteCategoryAlert.fxml");
             alert.onYes(() -> {
                 allProduct_list.removeAll(filteredProduct_list); // Deleting local copy of the products of the selected category
                 filteredProduct_list.clear(); // Deleting all the products from table
-                for (var i : productIDList) { // deleting all the products of selected category from database
-                    try {
-                        DBConnection.executeUpdate("Delete from product where id = " + i);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                }
+                for (var i : productIDList) // deleting all the products of selected category from database
+                    DBConnection.executeUpdate("Delete from product where id = " + i);
                 allCategory_list.remove(categoryBeingDeleted);
                 filterCategory_list.remove(categoryBeingDeleted);
-                try {
-                    DBConnection.executeUpdate(String.format("Delete from category where name = '%s'", categoryBeingDeleted));
-                } catch (SQLException sqlException) {
-                    sqlException.printStackTrace();
-                }
-                
+                DBConnection.executeUpdate(String.format("Delete from category where name = '%s'", categoryBeingDeleted));
                 //Following statement must be executed at the end of all statements
                 filterCategory_box.getSelectionModel().select("All");
             });
             alert.onCancelRun(() -> filterCategory_box.getSelectionModel().select(oldCatSelected));
-        } else { // If no products exists in the selected category
+        } else { // If no product exists in the selected category
             allCategory_list.remove(categoryBeingDeleted);
             DBConnection.executeUpdate(String.format("Delete from category where name = '%s'", categoryBeingDeleted));
         }
@@ -314,22 +286,18 @@ public class ProductController {
                 globalProduct_obj.setName(productName);
                 globalProduct_obj.setCategory(productCategory);
                 globalProduct_obj.setDescription(productDescription);
-                try {
-                    // Get id of the selected category from Category Table to Insert into Product Table
-                    String categoryIdQuery = String.format("Select id from category where name='%s'", productCategory);
-                    int categoryID = DBConnection.getIntResult(categoryIdQuery);
+                // Get id of the selected category from Category Table to Insert into Product Table
+                String categoryIdQuery = String.format("Select id from category where name='%s'", productCategory);
+                int categoryID = DBConnection.getIntResult(categoryIdQuery);
     
-                    // Updating Product details in database
-                    String query = String.format("Update product set name='%s', category_id=%d, description='%s' where id=%d",
-                            productName, categoryID, productDescription, productID);
-                    
-                    // Clears Product & Description Fields
-                    productName_field.clear();
-                    productDescription_field.clear();
-                    DBConnection.executeQuery(query);
-                } catch (SQLException sqlException) {
-                    sqlException.printStackTrace();
-                }
+                // Updating Product details in database
+                String query = String.format("Update product set name='%s', category_id=%d, description='%s' where id=%d",
+                        productName, categoryID, productDescription, productID);
+    
+                // Clears Product & Description Fields
+                productName_field.clear();
+                productDescription_field.clear();
+                DBConnection.executeQuery(query);
             }
         });
     }
@@ -338,34 +306,29 @@ public class ProductController {
     void addProduct(ActionEvent event) {
         String productName = productName_field.getText().trim();
         GMSAlert alert = new GMSAlert(GMSAlert.AlertType.ADD_PRODUCT, productName);
-        alert.setFxmlPath("/views/alerts/AddProductAlert.fxml");
-        alert.show();
+        alert.show("/views/alerts/AddProductAlert.fxml");
         alert.onYes(() -> {
             String productCategory = productCategory_box.getValue();
             String productDescription = productDescription_field.getText().trim();
             productDescription = productDescription.isEmpty() ? "Description not Provided" : productDescription;
-            int lastPid = -1;
-            try {
-                // Get id of the selected category from Category Table to Insert into Product Table
-                String categoryIdQuery = String.format("Select id from category where name='%s'", productCategory);
-                int categoryID = DBConnection.getIntResult(categoryIdQuery);
-                
-                // AutoIncrement via Sequence, Inserting product into database
-                String query = String.format("Insert into product values(pro_seq.nextval, '%s', %d, '%s')", productName, categoryID, productDescription);
-                DBConnection.executeUpdate(query);
-                
-                // Getting Id of the Last Inserted Product to show inside table
-                String idQuery = "SELECT MAX(id) FROM product";
-                lastPid = DBConnection.getIntResult(idQuery);
-            } catch (SQLException sqlException) {
-                System.out.println("Add Product Exception = " + sqlException.getMessage());
-            }
-            
+        
+            // Get id of the selected category from Category Table to Insert into Product Table
+            String categoryIdQuery = String.format("Select id from category where name='%s'", productCategory);
+            int categoryID = DBConnection.getIntResult(categoryIdQuery);
+        
+            // AutoIncrement via Sequence, Inserting product into database
+            String query = String.format("Insert into product values(pro_seq.nextval, '%s', %d, '%s')", productName, categoryID, productDescription);
+            DBConnection.executeUpdate(query);
+        
+            // Getting Id of the Last Inserted Product to show inside table
+            String idQuery = "SELECT MAX(id) FROM product";
+            int lastPid = DBConnection.getIntResult(idQuery);
+        
             // Adding product to local copy of products.
             Product p = new Product(lastPid, productName, productCategory, productDescription);
             allProduct_list.add(p);
             filteredProduct_list.add(p);
-            
+        
             // Check weather category already exists in FilterCategoryList if not exists add it.
             if (!filterCategory_list.contains(productCategory))
                 filterCategory_list.add(productCategory);

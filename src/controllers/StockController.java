@@ -18,6 +18,8 @@ import models.Stock;
 import util.SearchFilter;
 import util.StageHandler;
 
+import java.util.stream.Collectors;
+
 public class StockController {
     
     public ComboBox<String> filterCategory_box;
@@ -76,7 +78,7 @@ public class StockController {
         allStock_list.addListener((InvalidationListener) c -> {
             int totalStockRecords = allStock_list.stream().mapToInt(Stock::getQuantity).sum();
             totalProductsInStock_label.setText(String.valueOf(totalStockRecords));
-        
+    
             String totalProducts = String.valueOf(allStock_list.size());
             totalStockRecords_label.setText(totalProducts);
         });
@@ -91,9 +93,11 @@ public class StockController {
     }
     
     private void loadFilterCategories() {
-        allStock_list.stream()
-                .filter(stock -> !filterCategory_list.contains(stock.getProductCategory()))
-                .forEach(stock -> filterCategory_list.add(stock.getProductCategory()));
+        filterCategory_list.addAll(allStock_list.stream()
+                .map(Stock::getProductCategory)
+                .distinct()
+                .collect(Collectors.toList())
+        );
         filterCategory_box.setItems(filterCategory_list);
         filterCategory_list.add(0, "All");
         filterCategory_box.getSelectionModel().select("All");
@@ -103,9 +107,9 @@ public class StockController {
     void filterStockByCategory(ActionEvent event) {
         filteredStock_list.clear();
         String categorySelected = filterCategory_box.getValue();
-        allStock_list.stream()
+        filteredStock_list.addAll(allStock_list.stream()
                 .filter(p -> p.getProductCategory().equals(categorySelected) || categorySelected.equals("All"))
-                .forEach(filteredStock_list::add);
+                .collect(Collectors.toList()));
     }
     
     @FXML

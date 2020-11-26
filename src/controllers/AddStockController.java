@@ -19,8 +19,8 @@ import util.GMSAlert;
 import util.NumberTextField;
 import util.SearchFilter;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 
 public class AddStockController {
@@ -116,9 +116,9 @@ public class AddStockController {
     void filterProductsByCategory(ActionEvent event) {
         filteredProduct_list.clear();
         String categorySelected = filterCategory_box.getValue();
-        allProduct_list.stream()
+        filteredProduct_list.addAll(allProduct_list.stream()
                 .filter(p -> p.getCategory().equals(categorySelected) || categorySelected.equals("All"))
-                .forEach(filteredProduct_list::add);
+                .collect(Collectors.toList()));
     }
     
     public void updateStock(ActionEvent event) {
@@ -127,31 +127,25 @@ public class AddStockController {
     public void addStock(ActionEvent event) {
         String stock = "Are you sure to Add the selected product Stock";
         GMSAlert alert = new GMSAlert(GMSAlert.AlertType.ADD_PRODUCT, stock);
-        alert.setFxmlPath("/views/alerts/AddProductAlert.fxml");
-        alert.show();
+        alert.show("/views/alerts/AddProductAlert.fxml");
         alert.onYes(() -> {
             Integer productID = Integer.valueOf(productID_field.getText());
             String productName = productName_field.getText();
             String productCategory = productCategory_field.getText();
             String productDescription = productDescription_txt.getText();
-    
+        
             LocalDate stockAdded = stockAdded_date.getValue();
             Integer notifyOn = Integer.valueOf(notifyOn_field.getText());
             Integer quantity = Integer.valueOf(quantity_field.getText());
             Integer totalPrice = Integer.valueOf(totalPrice_field.getText());
             Integer pricePerProduct = totalPrice / quantity;
-            int lastSid = -1;
-            try {
-                // AutoIncrement via Sequence, Inserting stock into database
-                String query = String.format("Insert into stock values(stock_seq.nextval, %d, to_date('%s', 'yyyy-mm-dd hh24:mi:ss'),'%d', '%d', '%d')", productID, stockAdded, notifyOn, totalPrice, quantity);
-                DBConnection.executeUpdate(query);
-    
-                // Getting Id of the Last Inserted Stock to show inside table
-                String idQuery = "SELECT MAX(id) FROM stock";
-                lastSid = DBConnection.getIntResult(idQuery);
-            } catch (SQLException sqlException) {
-                System.out.println("Add Stock Exception = " + sqlException.getMessage());
-            }
+        
+            // AutoIncrement via Sequence, Inserting stock into database
+            String query = String.format("Insert into stock values(stock_seq.nextval, %d, to_date('%s', 'yyyy-mm-dd hh24:mi:ss'),'%d', '%d', '%d')", productID, stockAdded, notifyOn, totalPrice, quantity);
+            DBConnection.executeUpdate(query);
+            // Getting Id of the Last Inserted Stock to show inside table
+            String idQuery = "SELECT MAX(id) FROM stock";
+            int lastSid = DBConnection.getIntResult(idQuery);
         });
     }
 }

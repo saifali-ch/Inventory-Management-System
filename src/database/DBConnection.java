@@ -13,18 +13,34 @@ public class DBConnection {
         return connection;
     }
     
-    public static void executeUpdate(String query) throws SQLException {
-        statement.executeUpdate(query);
+    public static void executeUpdate(String query) {
+        try {
+            statement.executeUpdate(query);
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
     }
     
-    public static ResultSet executeQuery(String query) throws SQLException {
-        return statement.executeQuery(query);
+    public static ResultSet executeQuery(String query) {
+        ResultSet resultSet = null;
+        try {
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+        return resultSet;
     }
     
-    public static int getIntResult(String query) throws SQLException {
-        ResultSet rs = statement.executeQuery(query);
-        rs.next();
-        return rs.getInt(1);
+    public static int getIntResult(String query) {
+        int result = -1;
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            result = rs.getInt(1);
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+        return result;
     }
     
     public static void createConnection() throws ClassNotFoundException, SQLException {

@@ -8,22 +8,17 @@ import models.Product;
 
 public class GMSAlert {
     private final AlertType alertType;
-    private String fxmlPath;
     private Object object;
     private Stage stage;
     private Scene scene;
     private Runnable onCancelCode = null;
-    
-    public GMSAlert(AlertType alertType) {
-        this.alertType = alertType;
-    }
     
     public GMSAlert(AlertType alertType, Object object) {
         this.alertType = alertType;
         this.object = object;
     }
     
-    public void show() {
+    public void show(String fxmlPath) {
         stage = StageHandler.createAlertStage(fxmlPath);
         scene = stage.getScene();
         stage.show();
@@ -72,10 +67,6 @@ public class GMSAlert {
     
     public void onCancelRun(Runnable code) {
         onCancelCode = code;
-    }
-    
-    public void setFxmlPath(String fxmlPath) {
-        this.fxmlPath = fxmlPath;
     }
     
     public void setObject(Object object) {
