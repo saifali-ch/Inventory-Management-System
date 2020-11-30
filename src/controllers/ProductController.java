@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import models.Product;
 import util.GMSAlert;
+import util.Panes;
 import util.SearchFilter;
 
 import java.io.IOException;
@@ -45,14 +46,14 @@ public class ProductController {
     public JFXButton addCategory_btn;
     public JFXButton deleteCategory_btn;
     public Label totalProducts_label;
-    public StackPane searchBar;
-    public static final ObservableList<String> allCategory_list = FXCollections.observableArrayList();
-    public static final ObservableList<Product> allProduct_list = FXCollections.observableArrayList();
+    public StackPane searchBar_pane;
+    public static final ObservableList<String> category_list = FXCollections.observableArrayList();
+    public static final ObservableList<Product> productBackup_list = FXCollections.observableArrayList();
     public static final ObservableList<String> filterCategory_list = FXCollections.observableArrayList();
-    public static final ObservableList<Product> filteredProduct_list = FXCollections.observableArrayList();
+    public static final ObservableList<Product> product_list = FXCollections.observableArrayList();
     private Product globalProduct_obj; // Used to update product
     
-    public void initialize() {
+    public void initialize() throws SQLException {
         createTable();
         configComboBoxes();
         createSearchFilter();
@@ -110,7 +111,7 @@ public class ProductController {
     }
     
     private void createSearchFilter() {
-        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
+        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar_pane, product_table, product_list);
         searchFilter.setCodeToAdjustColumnWidth(() -> {
                     if (searchFilter.getMatchedRecords() > 21)
                         description_col.setPrefWidth(320);
@@ -121,48 +122,44 @@ public class ProductController {
     
     private void addListenersAndFormValidators() {
         // Updates total no of products label
-        allProduct_list.addListener((InvalidationListener) c -> {
-            String totalProducts = String.valueOf(allProduct_list.size());
+        productBackup_list.addListener((InvalidationListener) c -> {
+            String totalProducts = String.valueOf(productBackup_list.size());
             totalProducts_label.setText(totalProducts);
         });
-        
+    
         // Add Category Button will be disabled if category name is blank or empty
         categoryName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
             addCategory_btn.setDisable(newValue.trim().isEmpty());
         });
-        
+    
         // Delete category button will be disabled if category being deleted is not selected.
         BooleanBinding delCatSelected = deleteCategory_box.getSelectionModel().selectedIndexProperty().isEqualTo(-1);
         deleteCategory_btn.disableProperty().bind(delCatSelected);
-        
+    
         // Product name field will be disabled if product category is not selected.
         BooleanBinding proCatSelected = productCategory_box.getSelectionModel().selectedIndexProperty().isEqualTo(-1);
         productName_field.disableProperty().bind(proCatSelected);
-        
+    
         // Add products button will be disabled if product name is blank or empty
         productName_field.textProperty().addListener((observableValue, oldValue, newValue) -> {
             addProduct_btn.setDisable(newValue.trim().isEmpty());
         });
     }
     
-    private void loadProducts() {
+    private void loadProducts() throws SQLException {
+        productBackup_list.clear();
+        product_list.clear();
         String query = "select * from product_view";
-        allProduct_list.clear();
-        filteredProduct_list.clear();
         ResultSet rs = DBConnection.executeQuery(query);
-        try {
-            while (rs.next()) {
-                Product product = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
-                allProduct_list.add(product);
-            }
-        } catch (SQLException sqlException) {
-            System.out.println("Load Products Exception = " + sqlException.getMessage());
+        while (rs.next()) {
+            productBackup_list.add(new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
         }
-        filteredProduct_list.addAll(allProduct_list);
-        filterCategory_list.addAll(allProduct_list.stream()
+        product_list.addAll(productBackup_list);
+        filterCategory_list.addAll(productBackup_list.stream()
                 .map(Product::getCategory)
                 .distinct()
                 .collect(Collectors.toList()));
+        filterCategory_list.add(0, "All");
         filterCategory_box.setItems(filterCategory_list);
         filterCategory_box.getSelectionModel().select("All");
     }
@@ -171,29 +168,28 @@ public class ProductController {
         String query = "Select name from category order by name";
         try {
             ResultSet rs = DBConnection.executeQuery(query);
-            allCategory_list.clear();
+            category_list.clear();
             while (rs.next())
-                allCategory_list.add(rs.getString(1));
+                category_list.add(rs.getString(1));
         } catch (SQLException sqlException) {
             System.out.println("Load All Categories Exception = " + sqlException.getMessage());
         }
-        productCategory_box.setItems(allCategory_list);
-        deleteCategory_box.setItems(allCategory_list);
+        productCategory_box.setItems(category_list);
+        deleteCategory_box.setItems(category_list);
     }
     
     @FXML
     void deleteProduct() {
         Product product = product_table.getSelectionModel().getSelectedItem();
         GMSAlert deleteAlert = new GMSAlert(GMSAlert.AlertType.DELETE_PRODUCT, product);
-        deleteAlert.show("/views/alerts/DeleteProductAlert.fxml");
+        deleteAlert.show(Panes.DELETE_PRODUCT_ALERT);
         deleteAlert.onYes(() -> {
-            allProduct_list.remove(product);
-            filteredProduct_list.remove(product);
-            long no_of_products_in_category = allProduct_list.stream()
-                    .filter(p -> p.getCategory().equals(product.getCategory()))
-                    .count();
-            if (no_of_products_in_category == 0) {
-                filterCategory_list.remove(product.getCategory());
+            productBackup_list.remove(product); // removing product from backup list
+            product_list.remove(product); // removing product from table view
+            String productCategory = product.getCategory();
+            // In case this was the last product, then removing the category from filterCategory_list
+            if (productBackup_list.stream().noneMatch(p -> p.getCategory().equals(productCategory))) {
+                filterCategory_list.remove(productCategory);
                 filterCategory_box.getSelectionModel().select("All");
             }
             String query = String.format("Delete from product where id = %d", product.getId());
@@ -209,9 +205,9 @@ public class ProductController {
     
     @FXML
     void filterProductsByCategory(ActionEvent event) {
-        filteredProduct_list.clear();
+        product_list.clear();
         String categorySelected = filterCategory_box.getValue();
-        filteredProduct_list.addAll(allProduct_list.stream()
+        product_list.addAll(productBackup_list.stream()
                 .filter(p -> p.getCategory().equals(categorySelected) || categorySelected.equals("All"))
                 .collect(Collectors.toList()));
     }
@@ -220,8 +216,8 @@ public class ProductController {
     void addCategory(ActionEvent event) {
         String categoryName = categoryName_field.getText().trim();
         boolean categoryAlreadyExists = false;
-        for (String s : allCategory_list) {
-            if (s.equalsIgnoreCase(categoryName)) {
+        for (var n : category_list) {
+            if (n.equalsIgnoreCase(categoryName)) {
                 categoryAlreadyExists = true;
                 break;
             }
@@ -234,7 +230,7 @@ public class ProductController {
         } else {
             String query = String.format("insert into category values(cat_seq.nextval, '%s')", categoryName);
             DBConnection.executeUpdate(query);
-            allCategory_list.add(categoryName);
+            category_list.add(categoryName);
             categoryName_field.clear();
             productCategory_box.getSelectionModel().selectLast();
         }
@@ -243,7 +239,7 @@ public class ProductController {
     @FXML
     void deleteCategory(ActionEvent event) {
         String categoryBeingDeleted = deleteCategory_box.getValue();
-        List<Integer> productIDList = allProduct_list.stream()
+        List<Integer> productIDList = productBackup_list.stream()
                 .filter(p -> p.getCategory().equals(categoryBeingDeleted))
                 .map(Product::getId)
                 .collect(Collectors.toList());
@@ -252,13 +248,13 @@ public class ProductController {
             String oldCatSelected = filterCategory_box.getValue();
             filterCategory_box.getSelectionModel().select(categoryBeingDeleted); // Show products of the selected category in table
             GMSAlert alert = new GMSAlert(GMSAlert.AlertType.DELETE_CATEGORY, productIDList.size());
-            alert.show("/views/alerts/DeleteCategoryAlert.fxml");
+            alert.show(Panes.DELETE_CATEGORY_ALERT);
             alert.onYes(() -> {
-                allProduct_list.removeAll(filteredProduct_list); // Deleting local copy of the products of the selected category
-                filteredProduct_list.clear(); // Deleting all the products from table
+                productBackup_list.removeAll(product_list); // Deleting local copy of the products of the selected category
+                product_list.clear(); // Deleting all the products from table
                 for (var i : productIDList) // deleting all the products of selected category from database
                     DBConnection.executeUpdate("Delete from product where id = " + i);
-                allCategory_list.remove(categoryBeingDeleted);
+                category_list.remove(categoryBeingDeleted);
                 filterCategory_list.remove(categoryBeingDeleted);
                 DBConnection.executeUpdate(String.format("Delete from category where name = '%s'", categoryBeingDeleted));
                 //Following statement must be executed at the end of all statements
@@ -266,7 +262,7 @@ public class ProductController {
             });
             alert.onCancelRun(() -> filterCategory_box.getSelectionModel().select(oldCatSelected));
         } else { // If no product exists in the selected category
-            allCategory_list.remove(categoryBeingDeleted);
+            category_list.remove(categoryBeingDeleted);
             DBConnection.executeUpdate(String.format("Delete from category where name = '%s'", categoryBeingDeleted));
         }
     }
@@ -306,7 +302,7 @@ public class ProductController {
     void addProduct(ActionEvent event) {
         String productName = productName_field.getText().trim();
         GMSAlert alert = new GMSAlert(GMSAlert.AlertType.ADD_PRODUCT, productName);
-        alert.show("/views/alerts/AddProductAlert.fxml");
+        alert.show(Panes.ADD_PRODUCT_ALERT);
         alert.onYes(() -> {
             String productCategory = productCategory_box.getValue();
             String productDescription = productDescription_field.getText().trim();
@@ -326,13 +322,14 @@ public class ProductController {
         
             // Adding product to local copy of products.
             Product p = new Product(lastPid, productName, productCategory, productDescription);
-            allProduct_list.add(p);
-            filteredProduct_list.add(p);
+            productBackup_list.add(p);
+            product_list.add(p);
         
             // Check weather category already exists in FilterCategoryList if not exists add it.
-            if (!filterCategory_list.contains(productCategory))
+            if (!filterCategory_list.contains(productCategory)) {
                 filterCategory_list.add(productCategory);
-            
+            }
+        
             // Clears ProductName & Description Fields
             productName_field.clear();
             productDescription_field.clear();
