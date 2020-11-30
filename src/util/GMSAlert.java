@@ -19,10 +19,11 @@ public class GMSAlert {
     }
     
     public void show(String fxmlPath) {
-        stage = StageHandler.createAlertStage(fxmlPath);
+        // Don't use "Cached Panes" for alert - it doesn't works
+        stage = StageHandler.createAlertStage(PaneHandler.loadPane(fxmlPath));
         scene = stage.getScene();
         stage.show();
-        setStageContent();
+        this.setStageContent();
         Button no = (Button) scene.lookup("#no");
         no.setOnMouseClicked(e -> {
             if (onCancelCode != null)

@@ -17,6 +17,7 @@ import javafx.scene.layout.StackPane;
 import models.Product;
 import util.GMSAlert;
 import util.NumberTextField;
+import util.Panes;
 import util.SearchFilter;
 
 import java.time.LocalDate;
@@ -41,21 +42,21 @@ public class AddStockController {
     public JFXTextField quantity_field;
     public JFXTextField totalPrice_field;
     public StackPane searchBar;
-    private static final ObservableList<Product> allProduct_list = ProductController.allProduct_list;
-    private static final ObservableList<Product> filteredProduct_list = FXCollections.observableArrayList();
+    private static final ObservableList<Product> productBackup_list = ProductController.productBackup_list;
+    private static final ObservableList<Product> product_list = FXCollections.observableArrayList();
     
     public void initialize() {
         createTable();
         createSearchFilter();
         
-        filteredProduct_list.clear(); // Must clear otherwise it may contain duplicate value
-        filteredProduct_list.addAll(allProduct_list);
+        product_list.clear(); // Must clear otherwise it may contain duplicate value
+        product_list.addAll(productBackup_list);
         
         filterCategory_box.setItems(ProductController.filterCategory_list);
         filterCategory_box.getSelectionModel().select("All");
         
-        totalProducts_label.setText(String.valueOf(allProduct_list.size()));
-    
+        totalProducts_label.setText(String.valueOf(productBackup_list.size()));
+        
         NumberTextField.makeFieldsNumberOnly(notifyOn_field, quantity_field, totalPrice_field);
         
         // All the product related fields are view only. So, make them un-editable
@@ -103,7 +104,7 @@ public class AddStockController {
     }
     
     private void createSearchFilter() {
-        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, filteredProduct_list);
+        SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, product_list);
         searchFilter.setCodeToAdjustColumnWidth(() -> {
                     if (searchFilter.getMatchedRecords() > 16)
                         description_col.setPrefWidth(363);
@@ -114,9 +115,9 @@ public class AddStockController {
     
     @FXML
     void filterProductsByCategory(ActionEvent event) {
-        filteredProduct_list.clear();
+        product_list.clear();
         String categorySelected = filterCategory_box.getValue();
-        filteredProduct_list.addAll(allProduct_list.stream()
+        product_list.addAll(productBackup_list.stream()
                 .filter(p -> p.getCategory().equals(categorySelected) || categorySelected.equals("All"))
                 .collect(Collectors.toList()));
     }
@@ -125,9 +126,9 @@ public class AddStockController {
     }
     
     public void addStock(ActionEvent event) {
-        String stock = "Are you sure to Add the selected product Stock";
+        String stock = "Are you sure to Add the selected products to Stock";
         GMSAlert alert = new GMSAlert(GMSAlert.AlertType.ADD_PRODUCT, stock);
-        alert.show("/views/alerts/AddProductAlert.fxml");
+        alert.show(Panes.ADD_PRODUCT_ALERT);
         alert.onYes(() -> {
             Integer productID = Integer.valueOf(productID_field.getText());
             String productName = productName_field.getText();

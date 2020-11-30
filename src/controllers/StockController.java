@@ -15,6 +15,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import models.Stock;
+import util.PaneHandler;
+import util.Panes;
 import util.SearchFilter;
 import util.StageHandler;
 
@@ -114,8 +116,7 @@ public class StockController {
     
     @FXML
     void AddStock(ActionEvent event) {
-        String fxmlPath = "/views/AddStock.fxml";
-        Stage stage = StageHandler.createStage(fxmlPath);
+        Stage stage = StageHandler.createStage(PaneHandler.loadCachedPane(Panes.ADD_STOCK));
         stage.show();
     }
     

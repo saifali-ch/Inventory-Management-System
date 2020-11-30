@@ -3,7 +3,8 @@ package main;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.stage.Stage;
+import util.PaneHandler;
+import util.Panes;
 import util.StageHandler;
 
 public class StartController {
@@ -15,9 +16,7 @@ public class StartController {
     
     @FXML
     void loadMenu(ActionEvent event) {
-        String fxmlPath = "/views/Menu.fxml";
-        Stage stage = StageHandler.createStage(fxmlPath);
-        stage.show();
-        ((Stage) (loadMenuButton.getScene().getWindow())).close();
+        StageHandler.createAndShowStage(PaneHandler.loadCachedPane(Panes.MENU));
+        StageHandler.closeStage(event);
     }
 }

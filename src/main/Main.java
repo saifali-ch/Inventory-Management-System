@@ -2,11 +2,12 @@ package main;
 
 import database.DBConnection;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import util.PaneHandler;
+import util.Panes;
 
 import java.sql.SQLException;
 
@@ -18,7 +19,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         DBConnection.createConnection();
-        Parent root = FXMLLoader.load(getClass().getResource("Start.fxml"));
+        Parent root = PaneHandler.loadCachedPane(Panes.START);
 //        JFXDecorator decorator = new JFXDecorator(stage, root);
 //        decorator.setCustomMaximize(true);
         Scene scene = new Scene(root);
