@@ -10,13 +10,13 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="740.0" prefWidth="1262.0" style="-fx-background-color: -gms-background;"
+            minWidth="-Infinity" prefHeight="740.0" prefWidth="1236.0" style="-fx-background-color: -gms-background;"
             xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controllers.AddStockController">
     <stylesheets>
         <URL value="@../stylesheets/Product.css"/>
         <URL value="@../stylesheets/Stock.css"/>
     </stylesheets>
-    <HBox layoutX="10.0" layoutY="50.0" spacing="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+    <HBox layoutX="10.0" layoutY="50.0" spacing="8.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
         <StackPane fx:id="searchBar" styleClass="SearchBar">
             <children>
                 <TextField prefWidth="350.0" promptText="Search by Product Name..."
@@ -25,9 +25,10 @@
                         <Insets/>
                     </opaqueInsets>
                 </TextField>
-               <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-var" text="1234" StackPane.alignment="CENTER_RIGHT" />
-               <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
-                   <Image url="@../media/unused/icons8_search_26px.png" />
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" styleClass="gms-label-var"
+                       text="1234" StackPane.alignment="CENTER_RIGHT"/>
+                <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
+                    <Image url="@../media/unused/icons8_search_26px.png"/>
                <StackPane.margin>
                   <Insets left="5.0" />
                </StackPane.margin>
@@ -53,28 +54,27 @@
         </HBox>
     </HBox>
     <TableView fx:id="product_table" editable="true" fixedCellSize="30.0" layoutX="10.0" layoutY="100.0"
-               prefHeight="529.0" prefWidth="826.0" stylesheets="@../stylesheets/controls/TableView.css"
+               prefHeight="529.0" prefWidth="811.0" stylesheets="@../stylesheets/controls/TableView.css"
                AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="55.0">
         <columns>
             <TableColumn fx:id="id_col" prefWidth="60.0" resizable="false" text="#ID"/>
-            <TableColumn fx:id="name_col" editable="false" prefWidth="200.0" resizable="false" text="Product Name"/>
-            <TableColumn fx:id="category_col" editable="false" prefWidth="125.0" resizable="false" text="Category"/>
+            <TableColumn fx:id="name_col" editable="false" prefWidth="220.0" resizable="false" text="Product Name"/>
+            <TableColumn fx:id="category_col" editable="false" prefWidth="150.0" resizable="false" text="Category"/>
             <TableColumn fx:id="description_col" editable="false" prefWidth="376.0" resizable="false" sortable="false"
                          text="Description"/>
-            <TableColumn fx:id="action_col" editable="false" prefWidth="60.0" resizable="false" sortable="false"
-                         text="Select"/>
         </columns>
     </TableView>
-    <VBox alignment="CENTER" layoutX="854.0" layoutY="55.0" styleClass="vbox" AnchorPane.leftAnchor="855.0" AnchorPane.topAnchor="10.0">
+    <VBox alignment="CENTER" layoutX="854.0" layoutY="55.0" styleClass="vbox" AnchorPane.leftAnchor="840.0"
+          AnchorPane.topAnchor="10.0">
         <HBox style="-fx-background-radius: 7;">
             <effect>
-                <DropShadow color="#d7dde5" offsetY="10.0" />
+                <DropShadow color="#d7dde5" offsetY="10.0"/>
             </effect>
             <VBox.margin>
-                <Insets bottom="20.0" />
+                <Insets bottom="20.0"/>
             </VBox.margin>
             <opaqueInsets>
-                <Insets />
+                <Insets/>
             </opaqueInsets>
             <Label id="heading2" alignment="CENTER" prefWidth="372.8" text="Product Details">
                 <HBox.margin>
@@ -132,7 +132,7 @@
             </VBox>
         </HBox>
     </VBox>
-    <VBox alignment="CENTER" layoutX="855.0" layoutY="328.0" styleClass="vbox" AnchorPane.leftAnchor="855.0"
+    <VBox alignment="CENTER" layoutX="855.0" layoutY="328.0" styleClass="vbox" AnchorPane.leftAnchor="840.0"
           AnchorPane.topAnchor="300.0">
         <HBox style="-fx-background-radius: 7;">
             <VBox.margin>

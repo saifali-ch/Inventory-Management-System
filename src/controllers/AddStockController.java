@@ -7,12 +7,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.Cursor;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import models.Product;
 import util.GMSAlert;
@@ -24,13 +23,12 @@ import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 
-public class AddStockController {
+public class AddStockController extends StockController {
     public TableView<Product> product_table;
     public TableColumn<Product, Integer> id_col;
     public TableColumn<Product, String> name_col;
     public TableColumn<Product, String> category_col;
     public TableColumn<Product, String> description_col;
-    public TableColumn<Product, HBox> action_col;
     public ComboBox<String> filterCategory_box;
     public Label totalProducts_label;
     public JFXTextField productID_field;
@@ -42,21 +40,16 @@ public class AddStockController {
     public JFXTextField quantity_field;
     public JFXTextField totalPrice_field;
     public StackPane searchBar;
-    private static final ObservableList<Product> productBackup_list = ProductController.productBackup_list;
     private static final ObservableList<Product> product_list = FXCollections.observableArrayList();
     
     public void initialize() {
         createTable();
         createSearchFilter();
-        
-        product_list.clear(); // Must clear otherwise it may contain duplicate value
-        product_list.addAll(productBackup_list);
+        AddStockController.refreshData();
         
         filterCategory_box.setItems(ProductController.filterCategory_list);
         filterCategory_box.getSelectionModel().select("All");
-        
-        totalProducts_label.setText(String.valueOf(productBackup_list.size()));
-        
+        totalProducts_label.setText(String.valueOf(product_list.size()));
         NumberTextField.makeFieldsNumberOnly(notifyOn_field, quantity_field, totalPrice_field);
         
         // All the product related fields are view only. So, make them un-editable
@@ -67,38 +60,19 @@ public class AddStockController {
     }
     
     private void createTable() {
-        product_table.setPlaceholder(new Label("No Product Available"));
+        product_table.setPlaceholder(new Label("Add Some Products First"));
         id_col.setCellValueFactory(new PropertyValueFactory<>("id"));
         name_col.setCellValueFactory(new PropertyValueFactory<>("name"));
         category_col.setCellValueFactory(new PropertyValueFactory<>("category"));
         description_col.setCellValueFactory(new PropertyValueFactory<>("description"));
-        action_col.setCellFactory(p -> new TableCell<>() {
-            final HBox hbox = new HBox();
-            
-            {
-                ImageView image = new ImageView(getClass().getResource("/media/icons/2x/check.png").toExternalForm());
-                image.setFitWidth(25);
-                image.setFitHeight(25);
-                
-                hbox.setPrefWidth(50);
-                hbox.setPrefHeight(30);
-                hbox.setPadding(new Insets(12.5)); //(HBoxPrefWidth - ImageFitWidth)/2 => (50 - 25)/2 = 12.5
-                hbox.getChildren().add(image);
-                
-                hbox.setOnMouseEntered(e -> hbox.setCursor(Cursor.HAND));
-                hbox.setOnMouseClicked(e -> {
-                    Product globalProduct_obj = getTableView().getSelectionModel().getSelectedItem();
-                    productID_field.setText(String.valueOf(globalProduct_obj.getId()));
-                    productName_field.setText(globalProduct_obj.getName());
-                    productCategory_field.setText(globalProduct_obj.getCategory());
-                    productDescription_txt.setText(globalProduct_obj.getDescription());
-                });
-            }
     
-            @Override
-            protected void updateItem(HBox hBox, boolean empty) {
-                super.updateItem(hBox, empty);
-                setGraphic(empty ? null : hbox);
+        product_table.setOnMouseClicked(e -> {
+            if (!product_table.getSelectionModel().isEmpty()) {
+                Product selectedProduct = product_table.getSelectionModel().getSelectedItem();
+                productID_field.setText(String.valueOf(selectedProduct.getId()));
+                productName_field.setText(selectedProduct.getName());
+                productCategory_field.setText(selectedProduct.getCategory());
+                productDescription_txt.setText(selectedProduct.getDescription());
             }
         });
     }
@@ -107,17 +81,22 @@ public class AddStockController {
         SearchFilter<Product> searchFilter = new SearchFilter<>(searchBar, product_table, product_list);
         searchFilter.setCodeToAdjustColumnWidth(() -> {
                     if (searchFilter.getMatchedRecords() > 16)
-                        description_col.setPrefWidth(363);
-                    else description_col.setPrefWidth(376);
+                        description_col.setPrefWidth(378);
+                    else description_col.setPrefWidth(391);
                 }
         );
+    }
+    
+    public static void refreshData() {
+        product_list.clear(); // Must clear otherwise it may contain duplicate value
+        product_list.addAll(ProductController.productBackup_list);
     }
     
     @FXML
     void filterProductsByCategory(ActionEvent event) {
         product_list.clear();
         String categorySelected = filterCategory_box.getValue();
-        product_list.addAll(productBackup_list.stream()
+        product_list.addAll(ProductController.productBackup_list.stream()
                 .filter(p -> p.getCategory().equals(categorySelected) || categorySelected.equals("All"))
                 .collect(Collectors.toList()));
     }
@@ -126,7 +105,7 @@ public class AddStockController {
     }
     
     public void addStock(ActionEvent event) {
-        String stock = "Are you sure to Add the selected products to Stock";
+        String stock = "Are you sure to add the selected product to Stock";
         GMSAlert alert = new GMSAlert(GMSAlert.AlertType.ADD_PRODUCT, stock);
         alert.show(Panes.ADD_PRODUCT_ALERT);
         alert.onYes(() -> {
@@ -134,13 +113,13 @@ public class AddStockController {
             String productName = productName_field.getText();
             String productCategory = productCategory_field.getText();
             String productDescription = productDescription_txt.getText();
-        
+    
             LocalDate stockAdded = stockAdded_date.getValue();
             Integer notifyOn = Integer.valueOf(notifyOn_field.getText());
             Integer quantity = Integer.valueOf(quantity_field.getText());
             Integer totalPrice = Integer.valueOf(totalPrice_field.getText());
             Integer pricePerProduct = totalPrice / quantity;
-        
+    
             // AutoIncrement via Sequence, Inserting stock into database
             String query = String.format("Insert into stock values(stock_seq.nextval, %d, to_date('%s', 'yyyy-mm-dd hh24:mi:ss'),'%d', '%d', '%d')", productID, stockAdded, notifyOn, totalPrice, quantity);
             DBConnection.executeUpdate(query);
