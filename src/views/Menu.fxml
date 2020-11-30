@@ -21,7 +21,7 @@
                 <Insets/>
             </opaqueInsets>
             <children>
-                <Label fx:id="paneName_label" alignment="CENTER" prefWidth="1250.0" text="Dashboard">
+                <Label fx:id="heading_label" alignment="CENTER" prefWidth="1250.0" text="Dashboard">
                     <HBox.margin>
                         <Insets/>
                     </HBox.margin>

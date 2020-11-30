@@ -25,6 +25,7 @@ public enum StageHandler {
         Stage stage = new Stage();
         stage.getIcons().add(icon);
         stage.setScene(scene);
+        stage.setTitle("Faizi Traders");
         return stage;
     }
     
