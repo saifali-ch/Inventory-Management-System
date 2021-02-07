@@ -1,6 +1,10 @@
 # Inventory Management System
 A software complying with many design rules, principles, patterns, and anti-patterns. With a fully Relational Database Design.
 
+[![Scc Count Badge](https://sloc.xyz/github/saifali-ch/Inventory-Management-System/?category=code)](https://github/saifali-ch/Inventory-Management-System/) 
+[![Scc Count Badge](https://sloc.xyz/github/saifali-ch/Inventory-Management-System/?category=lines)](https://github/saifali-ch/Inventory-Management-System/)
+[![Scc Count Badge](https://sloc.xyz/github/saifali-ch/Inventory-Management-System/?category=comments)](https://github/saifali-ch/Inventory-Management-System/)
+[![Scc Count Badge](https://sloc.xyz/github/saifali-ch/Inventory-Management-System/?category=blanks)](https://github/saifali-ch/Inventory-Management-System/)
 
 # Features
 - ### Pixel Perfect UI Customized with CSS.
@@ -18,30 +22,12 @@ A software complying with many design rules, principles, patterns, and anti-patt
 
 # Tech Stack
 
-**Database:** OracleXE 11g with OJDBC6 Connector
+**Database:** H2 Database
 
 **IDEs:** IntelliJ IDEA Ultimate and DataGrip Ultimate Edition
 
-**Languages:** Java 11, JavaFX 13, SQL
+**Languages:** Java 15, JavaFX 15, SQL
 
-**Libraries:** ControlsFX 11.0.2, AnimationFX 1.2.1, JFoenix 9.0.9
+**Libraries:** ControlsFX, AnimationFX, JFoenix
 
-
-# How to Build & Run?
-## Step 1: Database Installation and Table Creation
-1. Install OracleXE 11g.
-2. Search **Run SQL Command Line** and Run.
-3. Type the following commands:
-```SQL
-CONNECT SYSTEM/<password--during-installation>;
-CREATE USER GMS IDENTIFIED BY gms DEFAULT TABLESPACE USERS QUOTA UNLIMITED ON USERS;
-GRANT CREATE SESSION, CREATE TABLE, CREATE VIEW, CREATE SEQUENCE TO GMS;
-```
-4. Add Oracle Data Source in IntelliJ IDEA, Open Query Console, and run all the queries provided in **/src/database/create.sql** file.
-
-## Step 2: Add Libraries to Module
-1. Open IntelliJ IDEA, press **CTRL+ALT+SHIFT+S** to open Project Settings.
-2. Goto Global Libraries section, click the add button and add all the libraries provided in **/src/lib/** folder one by one.
-  
-## Step 3: Build & Run
-You are all done now, just click **Run** button.
+**Build Tool:** Gradle
