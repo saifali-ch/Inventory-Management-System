@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: transparent;" stylesheets="@../../stylesheets/Stock.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.alert.UpdateStockPopupController">
+   <children>
+      <VBox alignment="CENTER" style="-fx-background-color: -gms-background;" styleClass="vbox">
+         <children>
+            <HBox style="-fx-background-radius: 7;">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+               <effect>
+                  <DropShadow color="#d7dde5" offsetY="10.0" />
+               </effect>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <children>
+                  <Label id="heading2" alignment="CENTER" prefHeight="42.0" prefWidth="372.8" text="Stock Details">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+               <children>
+                  <VBox alignment="CENTER_RIGHT" spacing="10.0">
+                     <padding>
+                        <Insets bottom="10.0" right="10.0" />
+                     </padding>
+                     <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Date" />
+                        <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Notify On" />
+                        <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Quantity" />
+                        <Label alignment="CENTER_RIGHT" prefHeight="32.0" text="Total Price" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="10.0">
+                     <children>
+                        <JFXDatePicker fx:id="date" defaultColor="TRANSPARENT" prefHeight="32.0" prefWidth="250.0" promptText="13/04/2001" styleClass="date-picker" />
+                        <JFXTextField fx:id="notifyOn_field" focusColor="#405aa800" prefWidth="250.0" promptText="Minimum Product Limit" unFocusColor="#4d4d4d00">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="quantity_field" focusColor="#405aa800" prefWidth="250.0" promptText="Product Quantity" unFocusColor="#4d4d4d00">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="totalPrice_field" focusColor="#405aa800" prefWidth="250.0" promptText="Total Price" unFocusColor="#4d4d4d00">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </JFXTextField>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox spacing="10.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <children>
+                  <JFXButton fx:id="yes" buttonType="RAISED" focusTraversable="false" layoutX="20.0" layoutY="10.0" prefHeight="36.0" prefWidth="170.0" text="Update" />
+                  <JFXButton fx:id="no" buttonType="RAISED" focusTraversable="false" layoutX="20.0" layoutY="10.0" prefHeight="36.0" prefWidth="170.0" text="Cancel" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -1,22 +1,16 @@
-drop sequence cat_seq;
-drop sequence pro_seq;
-drop sequence stock_seq;
+drop sequence if exists cat_seq;
+drop sequence if exists pro_seq;
+drop sequence if exists stock_seq;
+drop view if exists stock_view;
+drop view if exists product_view;
+drop table if exists stock;
+drop table if exists product;
+drop table if exists category;
+
 create sequence cat_seq start with 1 increment by 1 cache 100;
 create sequence pro_seq start with 1 increment by 1 cache 100;
 create sequence stock_seq start with 1 increment by 1 cache 100;
 
-drop view product_view;
-
-create or replace view product_view as
-select p.id id, p.name name, c.name category, description
-from product p
-         inner join category c on p.category_id = c.id
-order by 1;
-
-
-drop table stock;
-drop table product;
-drop table category;
 create table category
 (
     id   number primary key,
@@ -27,19 +21,40 @@ create table product
 (
     id          number primary key,
     name        varchar2(50),
-    category_id not null references category (id) on delete cascade,
-    description varchar2(500) default 'Description not Provided'
+    category_id int not null,
+    description varchar2(500) default 'Description not Provided',
+    foreign key (category_id) references category (id) on delete cascade
 );
 
 create table stock
 (
     id          number primary key,
-    pro_id      number references product (id),
+    pro_id      int,
     date_added  date,
     notify_on   int,
     total_price int,
-    quantity    int
+    quantity    int,
+    foreign key (pro_id) references product (ID)
 );
+
+create or replace view product_view as
+select p.id, p.name, c.name category, description
+from product p
+         inner join category c on p.category_id = c.id
+order by 1;
+
+create or replace view stock_view as
+select s.id,
+       p.id         product_id,
+       p.name       product_name,
+       p.category   category,
+       s.date_added date_added,
+       s.notify_on,
+       s.total_price,
+       s.quantity
+from stock s
+         join product_view p on s.pro_id = p.id
+order by 1;
 
 Insert into category
 values (cat_seq.nextval, 'A-Gas');
@@ -112,7 +127,4 @@ values (pro_seq.nextval, 'Universal', 1, 'Product desc here');
 Insert into product
 values (pro_seq.nextval, 'Volt', 2, 'Product desc here');
 
-commit
-
-select *
-from product_view;
+commit;
